@@ -1,0 +1,97 @@
+# Final project - Meridian Pay / Bank Transactions
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.4.4
+    container_name: bank-es
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200 >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  elasticsearch-init:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.4.4
+    container_name: bank-es-init
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: "no"
+    volumes:
+      - ./elasticsearch/mappings:/mappings:ro
+    entrypoint: ["bash", "-c"]
+    command:
+      - |
+        set -e
+        curl -s -XPUT http://elasticsearch:9200/_index_template/bank-transactions \
+          -H 'Content-Type: application/json' \
+          --data-binary @/mappings/bank-transactions-template.json
+        curl -s -XPUT http://elasticsearch:9200/_index_template/bank-auth \
+          -H 'Content-Type: application/json' \
+          --data-binary @/mappings/bank-auth-template.json
+        curl -s -XPUT http://elasticsearch:9200/_index_template/bank-atm \
+          -H 'Content-Type: application/json' \
+          --data-binary @/mappings/bank-atm-template.json
+        curl -s -XPUT http://elasticsearch:9200/_index_template/bank-deadletter \
+          -H 'Content-Type: application/json' \
+          --data-binary @/mappings/bank-deadletter-template.json
+        curl -s -XPUT http://elasticsearch:9200/_index_template/alerts \
+          -H 'Content-Type: application/json' \
+          --data-binary @/mappings/alerts-template.json
+        echo "Elasticsearch templates installed"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.4.4
+    container_name: bank-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=a_teaching_key_that_is_32_chars_min_0001
+      - XPACK_SECURITY_ENCRYPTIONKEY=a_teaching_key_that_is_32_chars_min_0002
+      - XPACK_REPORTING_ENCRYPTIONKEY=a_teaching_key_that_is_32_chars_min_0003
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.4.4
+    container_name: bank-logstash
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+      - XPACK_MONITORING_ENABLED=false
+      - PIPELINE_ECS_COMPATIBILITY=disabled
+      - CONFIG_RELOAD_AUTOMATIC=true
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logs:/var/log/meridian:ro
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      elasticsearch-init:
+        condition: service_completed_successfully
+
+  kibana-init:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.4.4
+    container_name: bank-kibana-init
+    depends_on:
+      - kibana
+    restart: "no"
+    entrypoint: ["bash", "-c"]
+    command:
+      - |
+        until curl -s http://kibana:5601/api/status | grep -q '"level":"available"'; do sleep 3; done
+        curl -s -XPUT http://kibana:5601/api/spaces/space/default \
+             -H 'Content-Type: application/json' -H 'kbn-xsrf: true' \
+             -d '{"id":"default","name":"Default","solution":"classic"}' > /dev/null
+        echo "kibana default space set to classic navigation"
+
+volumes:
+  esdata:

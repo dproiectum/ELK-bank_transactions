@@ -1,0 +1,17 @@
+{
+  "index_patterns": ["bank-deadletter-*"],
+  "template": {
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "source_type": { "type": "keyword" },
+        "deadletter_reason": { "type": "keyword" },
+        "tags": { "type": "keyword" },
+        "path": { "type": "keyword" },
+        "raw_line": { "type": "keyword", "ignore_above": 4096 },
+        "message": { "type": "text" }
+      }
+    }
+  }
+}

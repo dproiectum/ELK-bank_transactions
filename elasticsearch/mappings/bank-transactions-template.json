@@ -1,0 +1,22 @@
+{
+  "index_patterns": ["bank-transactions-*"],
+  "template": {
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "source_type": { "type": "keyword" },
+        "event_type": { "type": "keyword" },
+        "transaction_id": { "type": "keyword" },
+        "amount": { "type": "double" },
+        "currency": { "type": "keyword" },
+        "country": { "type": "keyword" },
+        "card_present": { "type": "boolean" },
+        "merchant": { "type": "keyword" },
+        "status": { "type": "keyword" },
+        "reason": { "type": "keyword" },
+        "raw_line": { "type": "keyword", "ignore_above": 4096 }
+      }
+    }
+  }
+}

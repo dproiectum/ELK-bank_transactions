@@ -1,0 +1,28 @@
+{
+  "index_patterns": ["bank-auth-*"],
+  "template": {
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "source_type": { "type": "keyword" },
+        "event_type": { "type": "keyword" },
+        "user_id": { "type": "keyword" },
+        "channel": { "type": "keyword" },
+        "result": { "type": "keyword" },
+        "client_ip": { "type": "ip" },
+        "geoip": {
+          "properties": {
+            "location": { "type": "geo_point" },
+            "country_name": { "type": "keyword" },
+            "country_code2": { "type": "keyword" },
+            "continent_code": { "type": "keyword" },
+            "city_name": { "type": "keyword" },
+            "timezone": { "type": "keyword" }
+          }
+        },
+        "raw_line": { "type": "keyword", "ignore_above": 4096 }
+      }
+    }
+  }
+}

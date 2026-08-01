@@ -1,0 +1,18 @@
+{
+  "index_patterns": ["bank-atm-*"],
+  "template": {
+    "mappings": {
+      "dynamic": false,
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "source_type": { "type": "keyword" },
+        "atm_id": { "type": "keyword" },
+        "city": { "type": "keyword" },
+        "op": { "type": "keyword" },
+        "amount": { "type": "double" },
+        "result": { "type": "keyword" },
+        "raw_line": { "type": "keyword", "ignore_above": 4096 }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "index_patterns": ["alerts*"],
+  "template": {
+    "mappings": {
+      "dynamic": true,
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "rule_name": { "type": "keyword" },
+        "reason": { "type": "text" },
+        "event_count": { "type": "integer" }
+      }
+    }
+  }
+}

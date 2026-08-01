@@ -110,3 +110,4 @@ The generated anomaly should appear around the middle/end part of the batch. It 
 - Separate indices make mappings simple and keep each source easy to reason about.
 - `auth.log` gets GeoIP enrichment because IP geography helps explain the fraud signature.
 - Malformed lines are not dropped. They are indexed into `bank-deadletter-*` with the original line and a reason.
+# ELK-bank_transactions

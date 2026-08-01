@@ -6,9 +6,9 @@ Update this file and the relevant phase file before each meaningful commit.
 
 ## Current Phase
 
-**Phase 1 - Logstash ingestion** is in progress.
+**Phase 2 - Elasticsearch mappings** is the next validation phase.
 
-The Docker stack starts and Elasticsearch/Kibana/Logstash containers are running. Elasticsearch indices are created, but ingestion still needs a clean verification pass after the latest Logstash parsing correction.
+Phase 1 ingestion is validated, and the acceptance count now matches exactly. The next step is to validate Elasticsearch mappings, then create Kibana data views.
 
 ## Status Legend
 
@@ -25,9 +25,9 @@ The Docker stack starts and Elasticsearch/Kibana/Logstash containers are running
 | Phase | Status | Details | Short Notes |
 | --- | --- | --- | --- |
 | 0. Project structure | Done | [phase-00-project-structure.md](project-status/phase-00-project-structure.md) | Repository structure exists and the generator/logs folders are at project root. |
-| 1. Logstash ingestion | **In progress** | [phase-01-logstash-ingestion.md](project-status/phase-01-logstash-ingestion.md) | Three sources are wired. Transaction parsing was corrected and needs retest. |
-| 2. Elasticsearch mappings | Base done | [phase-02-elasticsearch-mappings.md](project-status/phase-02-elasticsearch-mappings.md) | Explicit templates exist for business indices, dead-letter, and alerts. |
-| 3. Acceptance count | **In progress** | [phase-03-acceptance-count.md](project-status/phase-03-acceptance-count.md) | Need to prove business docs + dead-letter docs = generated lines. |
+| 1. Logstash ingestion | Done | [phase-01-logstash-ingestion.md](project-status/phase-01-logstash-ingestion.md) | Three sources are parsed and routed correctly after the transaction parsing fix. |
+| 2. Elasticsearch mappings | **In progress** | [phase-02-elasticsearch-mappings.md](project-status/phase-02-elasticsearch-mappings.md) | Explicit templates exist and need final mapping validation. |
+| 3. Acceptance count | Done | [phase-03-acceptance-count.md](project-status/phase-03-acceptance-count.md) | Validated: indexed documents equal generated lines. |
 | 4. Kibana data views | Not started | [phase-04-kibana-data-views.md](project-status/phase-04-kibana-data-views.md) | Data views need to be created in Kibana. |
 | 5. Kibana dashboard | Not started | [phase-05-kibana-dashboard.md](project-status/phase-05-kibana-dashboard.md) | Dashboard must answer the 8 business questions. |
 | 6. Kibana alert | Not started | [phase-06-kibana-alert.md](project-status/phase-06-kibana-alert.md) | Fraud alert must write to `alerts`. |
@@ -36,19 +36,22 @@ The Docker stack starts and Elasticsearch/Kibana/Logstash containers are running
 
 ## Next Actions
 
-Run from the project root:
+Next validation commands:
 
 ```bash
-docker compose restart logstash
-./scripts/seed.sh 5000
-curl -s 'http://localhost:9200/_cat/indices/bank-*?h=index,docs.count' | sort
+curl -s 'http://localhost:9200/bank-transactions-*/_mapping?pretty'
+curl -s 'http://localhost:9200/bank-auth-*/_mapping?pretty'
+curl -s 'http://localhost:9200/bank-atm-*/_mapping?pretty'
 ```
 
-Expected result:
+Validated count from `GET _cat/indices?v`:
 
 ```text
-bank-deadletter-* should be close to the intentional malformed-line rate, not thousands of documents.
-business indices + dead-letter should equal generated input lines.
+bank-atm-2026.07.26            754
+bank-auth-2026.07.26          2960
+bank-deadletter-2026.08.01     170
+bank-transactions-2026.07.26  4888
+total                         8772
 ```
 
 ## Commit Checklist

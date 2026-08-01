@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress.
+Done.
 
 ## Goal
 
@@ -38,11 +38,44 @@ curl -s 'http://localhost:9200/bank-deadletter-*/_search?pretty' \
   -d '{"size":0,"aggs":{"reasons":{"terms":{"field":"deadletter_reason","size":20}}}}'
 ```
 
+## Validated Count
+
+The latest generated input files contain:
+
+```text
+transactions.log    5000 lines
+auth.log            3017 lines
+atm.csv              755 lines
+total               8772 lines
+```
+
+Validated Elasticsearch counts are:
+
+```text
+bank-atm-2026.07.26            754
+bank-auth-2026.07.26          2960
+bank-deadletter-2026.08.01     170
+bank-transactions-2026.07.26  4888
+```
+
+Total indexed documents:
+
+```text
+754 + 2960 + 170 + 4888 = 8772
+```
+
+Acceptance rule:
+
+```text
+business indices + dead-letter = generated input lines
+8772 = 8772
+```
+
 ## Remaining Work
 
-- Run the count check after the latest pipeline correction.
-- Record the validated counts here.
+- None for the count itself.
+- Optional: document dead-letter reasons with an aggregation screenshot or command output.
 
 ## Validated Counts
 
-Not validated yet after the latest pipeline correction.
+Validated from Kibana Dev Tools screenshot on 2026-08-01.

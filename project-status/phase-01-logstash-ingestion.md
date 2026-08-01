@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress.
+Done.
 
 ## Goal
 
@@ -55,21 +55,36 @@ Fix applied:
 transactions.log parsing now uses a strict grok pattern instead of a fragile post-kv field presence check.
 ```
 
-## Next Test
+## Validated Result
 
-Run:
-
-```bash
-docker compose restart logstash
-./scripts/seed.sh 5000
-curl -s 'http://localhost:9200/_cat/indices/bank-*?h=index,docs.count' | sort
-```
-
-Expected:
+The latest generated input files contain:
 
 ```text
-bank-deadletter-* should be close to the intentional malformed-line rate.
-business indices + dead-letter should equal generated input lines.
+transactions.log    5000 lines
+auth.log            3017 lines
+atm.csv              755 lines
+total               8772 lines
+```
+
+Validated Elasticsearch counts are:
+
+```text
+bank-atm-2026.07.26            754
+bank-auth-2026.07.26          2960
+bank-deadletter-2026.08.01     170
+bank-transactions-2026.07.26  4888
+```
+
+Total:
+
+```text
+754 + 2960 + 170 + 4888 = 8772
+```
+
+Conclusion:
+
+```text
+Every generated line is accounted for. Phase 1 ingestion is validated.
 ```
 
 ## Related Files

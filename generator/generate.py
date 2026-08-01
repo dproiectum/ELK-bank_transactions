@@ -23,6 +23,13 @@ CITIES = ["Lille", "Lyon", "Paris", "Nantes", "Bordeaux", "Marseille"]
 REASONS = ["insufficient_funds", "expired_card", "suspected_fraud", "wrong_pin"]
 CHANNELS = ["mobile", "web", "branch"]
 
+# Hourly activity curve inspired by Lab 3: quiet nights, business-hours and
+# evening peaks. Day weights keep the week varied without creating dead days.
+HOUR_CURVE = [0.25, 0.20, 0.15, 0.15, 0.20, 0.30, 0.50, 0.80,
+              1.00, 1.15, 1.25, 1.40, 1.60, 1.45, 1.20, 1.10,
+              1.00, 1.10, 1.30, 1.60, 1.70, 1.30, 0.80, 0.50]
+DAY_CURVE = [0.85, 1.05, 0.95, 1.20, 0.90, 1.10, 0.80]
+
 # The anomaly: a burst of declined card-not-present transactions from one
 # country, with matching auth failures from a narrow IP range.
 FRAUD_COUNTRY = "US"
@@ -35,10 +42,34 @@ def batch_window():
     return start, end
 
 
-def batch_timestamp(start, end, counter, total):
-    if total <= 1:
-        return end
-    return start + (end - start) * (counter / (total - 1))
+def batch_timestamps(rng, total):
+    start, end = batch_window()
+    buckets = []
+    weights = []
+    for hour_offset in range(7 * 24):
+        bucket_start = start + timedelta(hours=hour_offset)
+        bucket_end = min(bucket_start + timedelta(hours=1), end)
+        if bucket_start >= end:
+            break
+        duration = (bucket_end - bucket_start).total_seconds()
+        day_weight = DAY_CURVE[hour_offset // 24]
+        hour_weight = HOUR_CURVE[bucket_start.hour]
+        buckets.append((bucket_start, duration))
+        weights.append(day_weight * hour_weight * duration)
+
+    timestamps = []
+    for _ in range(total):
+        bucket_start, duration = rng.choices(buckets, weights=weights)[0]
+        timestamps.append(bucket_start + timedelta(seconds=rng.uniform(0, duration)))
+    timestamps.sort()
+    return timestamps
+
+
+def batch_fraction(t, start, end):
+    span = (end - start).total_seconds()
+    if span <= 0:
+        return 1.0
+    return (t - start).total_seconds() / span
 
 
 def mangle(rng, line):
@@ -110,9 +141,8 @@ def main():
     try:
         if args.batch:
             start, end = batch_window()
-            for i in range(args.batch):
-                t = batch_timestamp(start, end, i, args.batch)
-                emit(rng, t, i / args.batch, txn, auth, atm, i)
+            for i, t in enumerate(batch_timestamps(rng, args.batch)):
+                emit(rng, t, batch_fraction(t, start, end), txn, auth, atm, i)
         else:
             i = 0
             while True:

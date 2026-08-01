@@ -43,7 +43,7 @@ docker compose up -d
 ./scripts/seed.sh 5000
 ```
 
-Batch logs are spread across the last 7 days, ending when the seed command is launched. In Kibana, use a relative time range such as `Last 8 days`.
+Batch logs are spread across the last 7 days, ending when the seed command is launched. The distribution uses a realistic hourly curve: quiet nights, stronger daytime/evening traffic, and moderate day-to-day variation. In Kibana, use a relative time range such as `Last 8 days`.
 
 Kibana: <http://localhost:5601>  
 Elasticsearch: <http://localhost:9200>

@@ -8,7 +8,7 @@ Set the global time range to include the generated logs:
 Last 8 days
 ```
 
-Batch mode spreads events across the last 7 days, ending when the seed command is launched. Continuous mode uses current timestamps. Use an interval such as 1 hour or 12 hours for week-level charts.
+Batch mode spreads events across the last 7 days, ending when the seed command is launched. It uses a realistic curve inspired by Lab 3: quiet nights, stronger daytime/evening traffic, and moderate day-to-day variation. Continuous mode uses current timestamps. Use an interval such as 1 hour or 12 hours for week-level charts.
 
 ## Data Views
 
@@ -148,10 +148,10 @@ Metric: Count of records
 Validated result from the current batch:
 
 ```text
-suspected_fraud       352
+suspected_fraud       357
 wrong_pin              38
-insufficient_funds     33
-expired_card           31
+insufficient_funds     35
+expired_card           24
 ```
 
 ## Panel 5 - Card-Present Split Per Country
@@ -249,9 +249,9 @@ reason
 Validated result from the current batch:
 
 ```text
-Declined card-not-present transactions: 454
-US declined card-not-present transactions: 326
-suspected_fraud reason: 352
+Declined card-not-present transactions: 455
+US declined card-not-present transactions: 335
+suspected_fraud reason: 357
 ```
 
 Interpretation:
@@ -301,9 +301,9 @@ Value: Count of records in bank-deadletter-*
 Validated current value:
 
 ```text
-dead-letter documents: 170
-generated lines: 8772
-dead-letter share: 170 / 8772 = 1.94%
+dead-letter documents: 172
+generated lines: 8747
+dead-letter share: 172 / 8747 = 1.97%
 ```
 
 Breakdown panel:
@@ -318,8 +318,8 @@ Metric: Count of records
 Validated reasons:
 
 ```text
-invalid_transaction_line  112
-invalid_auth_line          57
+invalid_transaction_line  105
+invalid_auth_line          66
 csv_header                  1
 ```
 

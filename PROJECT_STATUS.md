@@ -10,7 +10,16 @@ Update this file and the relevant phase file before each meaningful commit.
 
 Phase 1 ingestion, Phase 2 mappings, Phase 3 acceptance count, and Phase 4 Kibana data views are validated. The next step is to build the dashboard answering the 8 business questions.
 
-Note: batch logs are spread across the last 7 days, ending when the seed command is launched, so Kibana can use a relative time range such as `Last 8 days`.
+Note: batch logs are spread across the last 7 days, ending when the seed command is launched. The generator uses a realistic hourly/day curve inspired by Lab 3, so Kibana can use a relative time range such as `Last 8 days`.
+
+Latest validated seed:
+
+```text
+generated lines: 8747
+indexed business docs: 8575
+dead-letter docs: 172
+total indexed docs: 8747
+```
 
 Continuous generation remains manual: run `python3 generator/generate.py` only when real-time simulation is needed. Do not use continuous mode for the fixed acceptance count.
 

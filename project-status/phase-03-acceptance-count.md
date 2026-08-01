@@ -40,37 +40,37 @@ curl -s 'http://localhost:9200/bank-deadletter-*/_search?pretty' \
 
 ## Validated Count
 
-Batch logs are spread across the last 7 days, ending when the seed command is launched.
+Batch logs are spread across the last 7 days, ending when the seed command is launched. The generator uses a realistic hourly/day curve inspired by Lab 3.
 
 The latest generated input files contain:
 
 ```text
 transactions.log    5000 lines
-auth.log            3017 lines
-atm.csv              755 lines
-total               8772 lines
+auth.log            3003 lines
+atm.csv              744 lines
+total               8747 lines
 ```
 
 Validated Elasticsearch counts are:
 
 ```text
-bank-atm-2026.07.26            754
-bank-auth-2026.07.26          2960
-bank-deadletter-2026.08.01     170
-bank-transactions-2026.07.26  4888
+bank-transactions-*  4895
+bank-auth-*          2937
+bank-atm-*            743
+bank-deadletter-*     172
 ```
 
 Total indexed documents:
 
 ```text
-754 + 2960 + 170 + 4888 = 8772
+4895 + 2937 + 743 + 172 = 8747
 ```
 
 Acceptance rule:
 
 ```text
 business indices + dead-letter = generated input lines
-8772 = 8772
+8747 = 8747
 ```
 
 ## Remaining Work
@@ -80,4 +80,4 @@ business indices + dead-letter = generated input lines
 
 ## Validated Counts
 
-Validated from Kibana Dev Tools screenshot on 2026-08-01.
+Validated after the 7-day distribution update on 2026-08-01.

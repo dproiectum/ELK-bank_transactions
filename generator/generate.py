@@ -17,7 +17,6 @@ import time
 from datetime import datetime, timedelta, timezone
 
 SEED = 20260726
-BASE = datetime(2026, 7, 26, 0, 0, 0, tzinfo=timezone.utc)
 CURRENCIES = ["EUR", "EUR", "EUR", "USD", "GBP"]
 COUNTRIES = ["FR", "FR", "DE", "ES", "IT", "GB", "US", "BE"]
 CITIES = ["Lille", "Lyon", "Paris", "Nantes", "Bordeaux", "Marseille"]
@@ -28,6 +27,18 @@ CHANNELS = ["mobile", "web", "branch"]
 # country, with matching auth failures from a narrow IP range.
 FRAUD_COUNTRY = "US"
 ANOMALY_WINDOW = (0.55, 0.70)  # fraction of the batch
+
+
+def batch_window():
+    end = datetime.now(timezone.utc)
+    start = end - timedelta(days=7)
+    return start, end
+
+
+def batch_timestamp(start, end, counter, total):
+    if total <= 1:
+        return end
+    return start + (end - start) * (counter / (total - 1))
 
 
 def mangle(rng, line):
@@ -98,9 +109,9 @@ def main():
         atm.write("ts,atm_id,city,op,amount,result\n")
     try:
         if args.batch:
-            t = BASE
+            start, end = batch_window()
             for i in range(args.batch):
-                t += timedelta(seconds=rng.expovariate(20))
+                t = batch_timestamp(start, end, i, args.batch)
                 emit(rng, t, i / args.batch, txn, auth, atm, i)
         else:
             i = 0

@@ -33,9 +33,23 @@ matching auth failures from IPs around 181.214.200-210.x
 
 ## Remaining Work
 
+- Rerun `./scripts/seed.sh 5000` after the batch timestamp change.
+- Set Kibana's time range to `Last 8 days`.
 - Create dashboard panels.
 - Make sure each panel answers a specific question.
 - Add a screenshot to the README when final.
+
+## Continuous Demonstration Option
+
+For a real-time ingestion demonstration, manually run:
+
+```bash
+python3 generator/generate.py
+```
+
+This continuously writes logs with current timestamps. Use it only when you want to demonstrate Logstash ingesting new events while the stack is running.
+
+Do not use continuous mode for the fixed acceptance count, because generated line counts keep increasing.
 
 ## Panel Plan
 

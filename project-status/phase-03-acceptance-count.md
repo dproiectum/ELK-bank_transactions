@@ -40,6 +40,8 @@ curl -s 'http://localhost:9200/bank-deadletter-*/_search?pretty' \
 
 ## Validated Count
 
+Batch logs are spread across the last 7 days, ending when the seed command is launched.
+
 The latest generated input files contain:
 
 ```text

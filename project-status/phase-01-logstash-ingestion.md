@@ -57,6 +57,8 @@ transactions.log parsing now uses a strict grok pattern instead of a fragile pos
 
 ## Validated Result
 
+Batch logs are spread across the last 7 days, ending when the seed command is launched.
+
 The latest generated input files contain:
 
 ```text

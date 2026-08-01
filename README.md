@@ -43,8 +43,28 @@ docker compose up -d
 ./scripts/seed.sh 5000
 ```
 
+Batch logs are spread across the last 7 days, ending when the seed command is launched. In Kibana, use a relative time range such as `Last 8 days`.
+
 Kibana: <http://localhost:5601>  
 Elasticsearch: <http://localhost:9200>
+
+## Continuous Generator
+
+For the graded reproducible demo, use the seed command:
+
+```bash
+./scripts/seed.sh 5000
+```
+
+If you want to simulate real-time logs manually, run the original generator without `--batch`:
+
+```bash
+python3 generator/generate.py
+```
+
+This writes new log lines continuously with current timestamps. Stop it with `Ctrl+C`.
+
+Do not use continuous mode for the acceptance count, because generated line counts keep increasing.
 
 ## Acceptance Count
 

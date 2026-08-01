@@ -2,13 +2,13 @@
 
 This file describes the dashboard panels to build in Kibana for the final project. Each panel maps directly to one of the 8 required business questions.
 
-Set the global time range to include:
+Set the global time range to include the generated logs:
 
 ```text
-2026-07-26 00:00:00 UTC
+Last 8 days
 ```
 
-The generated batch is short, so use a small interval such as seconds or 1 minute when a time chart looks compressed.
+Batch mode spreads events across the last 7 days, ending when the seed command is launched. Continuous mode uses current timestamps. Use an interval such as 1 hour or 12 hours for week-level charts.
 
 ## Data Views
 

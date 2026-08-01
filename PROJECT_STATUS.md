@@ -1,51 +1,28 @@
 # Project Status - ELK-bank_transactions
 
-This file tracks the current state of the project so anyone following the GitHub repository can quickly understand what is done, what is in progress, and what remains.
+This file is the general project tracker. Each phase has its own detailed status file in [`project-status/`](project-status/).
 
-Update this file before each meaningful commit.
+Update this file and the relevant phase file before each meaningful commit.
 
 ## Current Phase
 
-Phase 1 - Logstash ingestion is in progress.
+**Phase 1 - Logstash ingestion** is in progress.
 
 The Docker stack starts and Elasticsearch/Kibana/Logstash containers are running. Elasticsearch indices are created, but ingestion still needs a clean verification pass after the latest Logstash parsing correction.
 
-## Progress
+## Progress Overview
 
-| Phase | Status | Notes |
-| --- | --- | --- |
-| 0. Project structure | Done | Repository structure created with Docker, Logstash, Elasticsearch mappings, Kibana folder, generator, logs, and scripts. |
-| 1. Logstash ingestion | In progress | Three sources are wired: transactions, auth, and ATM. A parsing issue with `card_present=false` was corrected. Needs retest. |
-| 2. Elasticsearch mappings | Base done | Explicit index templates exist for business indices, dead-letter, and alerts. Needs validation after fresh indexing. |
-| 3. Acceptance count | In progress | Need to prove: business docs + dead-letter docs = generated lines. |
-| 4. Kibana data views | Not started | Need data views for `bank-transactions-*`, `bank-auth-*`, `bank-atm-*`, `bank-deadletter-*`, and `alerts*`. |
-| 5. Kibana dashboard | Not started | Must answer the 8 business questions from the bank-transactions kit. |
-| 6. Kibana alert | Not started | Alert: more than 20 declined card-not-present transactions within 5 minutes; action writes to `alerts`. |
-| 7. Export saved objects | Not started | Export dashboard/rule to `kibana/dashboard.ndjson`. |
-| 8. Final README and demo rehearsal | Partial | README exists, but needs final screenshots, validation counts, and defense notes. |
-
-## Last Known Elasticsearch State
-
-Before the latest pipeline correction, the project had too many dead-letter documents:
-
-```text
-bank-transactions-2026.07.26    2919 docs
-bank-auth-2026.07.26            2964 docs
-bank-atm-2026.07.26              754 docs
-bank-deadletter-2026.08.01      2145 docs
-```
-
-Problem found:
-
-```text
-Valid transactions with card_present=false were incorrectly routed to dead-letter.
-```
-
-Fix applied:
-
-```text
-transactions.log parsing now uses a strict grok pattern instead of a fragile post-kv field presence check.
-```
+| Phase | Status | Details | Short Notes |
+| --- | --- | --- | --- |
+| 0. Project structure | Done | [phase-00-project-structure.md](project-status/phase-00-project-structure.md) | Repository structure exists and the generator/logs folders are at project root. |
+| 1. Logstash ingestion | In progress | [phase-01-logstash-ingestion.md](project-status/phase-01-logstash-ingestion.md) | Three sources are wired. Transaction parsing was corrected and needs retest. |
+| 2. Elasticsearch mappings | Base done | [phase-02-elasticsearch-mappings.md](project-status/phase-02-elasticsearch-mappings.md) | Explicit templates exist for business indices, dead-letter, and alerts. |
+| 3. Acceptance count | In progress | [phase-03-acceptance-count.md](project-status/phase-03-acceptance-count.md) | Need to prove business docs + dead-letter docs = generated lines. |
+| 4. Kibana data views | Not started | [phase-04-kibana-data-views.md](project-status/phase-04-kibana-data-views.md) | Data views need to be created in Kibana. |
+| 5. Kibana dashboard | Not started | [phase-05-kibana-dashboard.md](project-status/phase-05-kibana-dashboard.md) | Dashboard must answer the 8 business questions. |
+| 6. Kibana alert | Not started | [phase-06-kibana-alert.md](project-status/phase-06-kibana-alert.md) | Fraud alert must write to `alerts`. |
+| 7. Export saved objects | Not started | [phase-07-export-saved-objects.md](project-status/phase-07-export-saved-objects.md) | Export dashboard/rule to `kibana/dashboard.ndjson`. |
+| 8. Final README and demo rehearsal | Partial | [phase-08-final-readme-demo.md](project-status/phase-08-final-readme-demo.md) | README exists but needs final validation counts and defense notes. |
 
 ## Next Actions
 
@@ -69,8 +46,8 @@ business indices + dead-letter should equal generated input lines.
 Before each commit:
 
 ```text
-1. Update this PROJECT_STATUS.md file.
-2. Mention the current phase.
+1. Update PROJECT_STATUS.md if the global phase/status changed.
+2. Update the relevant file in project-status/.
 3. Mention what changed.
 4. Mention what still needs to be tested or completed.
 5. Keep generated logs out of Git.

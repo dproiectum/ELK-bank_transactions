@@ -1,0 +1,33 @@
+# Phase 8 - Final README And Demo Rehearsal
+
+## Status
+
+Partial.
+
+## Goal
+
+Make the repository understandable and reproducible for grading and GitHub readers.
+
+## Done
+
+- README exists.
+- Architecture is documented.
+- Run commands are documented.
+- Choices and trade-offs section exists.
+
+## Remaining Work
+
+- Add final acceptance counts.
+- Add screenshots or proof for dashboard and alert.
+- Confirm the two-command run path:
+
+```bash
+docker compose up -d
+./scripts/seed.sh 5000
+```
+
+- Rehearse the defense flow:
+
+```text
+start stack -> seed data -> show dashboard -> trigger/show alert -> explain choices
+```

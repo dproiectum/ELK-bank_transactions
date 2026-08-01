@@ -2,7 +2,7 @@
 
 ## Status
 
-Not started.
+Done.
 
 ## Goal
 
@@ -20,8 +20,19 @@ alerts*
 
 Use `@timestamp` as the time field where available.
 
+## Created Data Views
+
+Validated through the Kibana API:
+
+| Title | Name | Time field |
+| --- | --- | --- |
+| `bank-transactions-*` | Bank Transactions | `@timestamp` |
+| `bank-auth-*` | Bank Auth | `@timestamp` |
+| `bank-atm-*` | Bank ATM | `@timestamp` |
+| `bank-deadletter-*` | Bank Deadletter | `@timestamp` |
+| `alerts*` | Alerts | `@timestamp` |
+
 ## Remaining Work
 
-- Create data views in Kibana.
-- Confirm fields appear with the expected types.
-- Confirm time filters show data from `2026-07-26`.
+- None for data view creation.
+- During dashboard work, confirm time filters show data from `2026-07-26`.

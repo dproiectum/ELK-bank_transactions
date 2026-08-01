@@ -1,6 +1,7 @@
 # ELK-bank_transactions
 
 Project progress is tracked in [PROJECT_STATUS.md](PROJECT_STATUS.md).
+Dashboard planning is documented in [kibana/DASHBOARD_PLAN.md](kibana/DASHBOARD_PLAN.md).
 
 ## Architecture
 

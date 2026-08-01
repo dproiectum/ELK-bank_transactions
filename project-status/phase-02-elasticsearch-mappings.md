@@ -2,7 +2,7 @@
 
 ## Status
 
-Base done.
+Done.
 
 ## Goal
 
@@ -31,9 +31,63 @@ Important field choices:
 | `geoip.location` | `geo_point` | Needed for map visualizations. |
 | `@timestamp` | `date` | Needed for time-series dashboards and alerts. |
 
+## Validated Mappings
+
+The real Elasticsearch indices were checked after ingestion.
+
+Transactions:
+
+```text
+@timestamp      date
+amount          double
+card_present    boolean
+country         keyword
+currency        keyword
+merchant        keyword
+reason          keyword
+status          keyword
+transaction_id  keyword
+dynamic         false
+```
+
+Auth:
+
+```text
+@timestamp       date
+client_ip        ip
+geoip.location   geo_point
+channel          keyword
+result           keyword
+user_id          keyword
+dynamic          false
+```
+
+ATM:
+
+```text
+@timestamp  date
+amount      double
+atm_id      keyword
+city        keyword
+op          keyword
+result      keyword
+dynamic     false
+```
+
+Dead-letter:
+
+```text
+@timestamp          date
+deadletter_reason   keyword
+path                keyword
+raw_line            keyword
+message             text
+tags                keyword
+dynamic             false
+```
+
 ## Remaining Work
 
-- Validate mappings after a fresh seed.
 - Confirm dashboard panels use mapped fields correctly.
 
 ## Related Files

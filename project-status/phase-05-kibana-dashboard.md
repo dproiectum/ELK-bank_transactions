@@ -2,7 +2,7 @@
 
 ## Status
 
-Not started.
+In progress.
 
 ## Goal
 
@@ -36,3 +36,16 @@ matching auth failures from IPs around 181.214.200-210.x
 - Create dashboard panels.
 - Make sure each panel answers a specific question.
 - Add a screenshot to the README when final.
+
+## Panel Plan
+
+The detailed panel plan is documented in [`kibana/DASHBOARD_PLAN.md`](../kibana/DASHBOARD_PLAN.md).
+
+Current validated fraud signal:
+
+```text
+Declined card-not-present transactions: 454
+US declined card-not-present transactions: 326
+suspected_fraud reason: 352
+Auth failures concentrate in IP prefixes 181.214.200.x to 181.214.210.x.
+```

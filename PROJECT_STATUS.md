@@ -6,9 +6,9 @@ Update this file and the relevant phase file before each meaningful commit.
 
 ## Current Phase
 
-**Phase 2 - Elasticsearch mappings** is the next validation phase.
+**Phase 5 - Kibana dashboard** is the current phase.
 
-Phase 1 ingestion is validated, and the acceptance count now matches exactly. The next step is to validate Elasticsearch mappings, then create Kibana data views.
+Phase 1 ingestion, Phase 2 mappings, Phase 3 acceptance count, and Phase 4 Kibana data views are validated. The next step is to build the dashboard answering the 8 business questions.
 
 ## Status Legend
 
@@ -26,33 +26,19 @@ Phase 1 ingestion is validated, and the acceptance count now matches exactly. Th
 | --- | --- | --- | --- |
 | 0. Project structure | Done | [phase-00-project-structure.md](project-status/phase-00-project-structure.md) | Repository structure exists and the generator/logs folders are at project root. |
 | 1. Logstash ingestion | Done | [phase-01-logstash-ingestion.md](project-status/phase-01-logstash-ingestion.md) | Three sources are parsed and routed correctly after the transaction parsing fix. |
-| 2. Elasticsearch mappings | **In progress** | [phase-02-elasticsearch-mappings.md](project-status/phase-02-elasticsearch-mappings.md) | Explicit templates exist and need final mapping validation. |
+| 2. Elasticsearch mappings | Done | [phase-02-elasticsearch-mappings.md](project-status/phase-02-elasticsearch-mappings.md) | Explicit mappings are validated on the real indices. |
 | 3. Acceptance count | Done | [phase-03-acceptance-count.md](project-status/phase-03-acceptance-count.md) | Validated: indexed documents equal generated lines. |
-| 4. Kibana data views | Not started | [phase-04-kibana-data-views.md](project-status/phase-04-kibana-data-views.md) | Data views need to be created in Kibana. |
-| 5. Kibana dashboard | Not started | [phase-05-kibana-dashboard.md](project-status/phase-05-kibana-dashboard.md) | Dashboard must answer the 8 business questions. |
+| 4. Kibana data views | Done | [phase-04-kibana-data-views.md](project-status/phase-04-kibana-data-views.md) | Data views were created through the Kibana API. |
+| 5. Kibana dashboard | **In progress** | [phase-05-kibana-dashboard.md](project-status/phase-05-kibana-dashboard.md) | Dashboard must answer the 8 business questions. |
 | 6. Kibana alert | Not started | [phase-06-kibana-alert.md](project-status/phase-06-kibana-alert.md) | Fraud alert must write to `alerts`. |
 | 7. Export saved objects | Not started | [phase-07-export-saved-objects.md](project-status/phase-07-export-saved-objects.md) | Export dashboard/rule to `kibana/dashboard.ndjson`. |
 | 8. Final README and demo rehearsal | Partial | [phase-08-final-readme-demo.md](project-status/phase-08-final-readme-demo.md) | README exists but needs final validation counts and defense notes. |
 
 ## Next Actions
 
-Next validation commands:
+Next action:
 
-```bash
-curl -s 'http://localhost:9200/bank-transactions-*/_mapping?pretty'
-curl -s 'http://localhost:9200/bank-auth-*/_mapping?pretty'
-curl -s 'http://localhost:9200/bank-atm-*/_mapping?pretty'
-```
-
-Validated count from `GET _cat/indices?v`:
-
-```text
-bank-atm-2026.07.26            754
-bank-auth-2026.07.26          2960
-bank-deadletter-2026.08.01     170
-bank-transactions-2026.07.26  4888
-total                         8772
-```
+Build the Kibana dashboard panels for the 8 bank-transactions business questions.
 
 ## Commit Checklist
 

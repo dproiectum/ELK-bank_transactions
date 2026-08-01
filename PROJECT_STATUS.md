@@ -10,14 +10,24 @@ Update this file and the relevant phase file before each meaningful commit.
 
 The Docker stack starts and Elasticsearch/Kibana/Logstash containers are running. Elasticsearch indices are created, but ingestion still needs a clean verification pass after the latest Logstash parsing correction.
 
+## Status Legend
+
+| Status | Meaning |
+| --- | --- |
+| Done | The phase is finished and verified. |
+| Base done | The main files or structure exist, but final validation is still needed. |
+| In progress | Work is currently happening in this phase. |
+| Not started | No meaningful work has started yet. |
+| Partial | Some work exists, but the phase is clearly incomplete. |
+
 ## Progress Overview
 
 | Phase | Status | Details | Short Notes |
 | --- | --- | --- | --- |
 | 0. Project structure | Done | [phase-00-project-structure.md](project-status/phase-00-project-structure.md) | Repository structure exists and the generator/logs folders are at project root. |
-| 1. Logstash ingestion | In progress | [phase-01-logstash-ingestion.md](project-status/phase-01-logstash-ingestion.md) | Three sources are wired. Transaction parsing was corrected and needs retest. |
+| 1. Logstash ingestion | **In progress** | [phase-01-logstash-ingestion.md](project-status/phase-01-logstash-ingestion.md) | Three sources are wired. Transaction parsing was corrected and needs retest. |
 | 2. Elasticsearch mappings | Base done | [phase-02-elasticsearch-mappings.md](project-status/phase-02-elasticsearch-mappings.md) | Explicit templates exist for business indices, dead-letter, and alerts. |
-| 3. Acceptance count | In progress | [phase-03-acceptance-count.md](project-status/phase-03-acceptance-count.md) | Need to prove business docs + dead-letter docs = generated lines. |
+| 3. Acceptance count | **In progress** | [phase-03-acceptance-count.md](project-status/phase-03-acceptance-count.md) | Need to prove business docs + dead-letter docs = generated lines. |
 | 4. Kibana data views | Not started | [phase-04-kibana-data-views.md](project-status/phase-04-kibana-data-views.md) | Data views need to be created in Kibana. |
 | 5. Kibana dashboard | Not started | [phase-05-kibana-dashboard.md](project-status/phase-05-kibana-dashboard.md) | Dashboard must answer the 8 business questions. |
 | 6. Kibana alert | Not started | [phase-06-kibana-alert.md](project-status/phase-06-kibana-alert.md) | Fraud alert must write to `alerts`. |

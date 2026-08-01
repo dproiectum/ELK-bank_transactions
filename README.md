@@ -1,6 +1,6 @@
 # ELK-bank_transactions
 
-Final project domain: `bank-transactions`.
+Project progress is tracked in [PROJECT_STATUS.md](PROJECT_STATUS.md).
 
 ## Architecture
 
@@ -15,7 +15,7 @@ logs/
         |
         v
 Logstash
-  - parse key=value transactions
+  - parse key=value-like transactions with a strict grok pattern
   - parse JSON auth events
   - parse CSV ATM events
   - enrich auth IPs with geoip
@@ -104,10 +104,9 @@ The generated anomaly should appear around the middle/end part of the batch. It 
 
 ## Choices And Trade-Offs
 
-- `kv` is used for `transactions.log` because the source is stable `key=value` pairs separated by spaces.
+- A strict `grok` pattern is used for `transactions.log`: it keeps the key=value structure predictable and avoids treating `card_present=false` as a missing field.
 - `json` is used for `auth.log` because the source is already JSON lines.
 - `csv` is used for `atm.csv` because the source is a regular comma-separated export.
 - Separate indices make mappings simple and keep each source easy to reason about.
 - `auth.log` gets GeoIP enrichment because IP geography helps explain the fraud signature.
 - Malformed lines are not dropped. They are indexed into `bank-deadletter-*` with the original line and a reason.
-# ELK-bank_transactions

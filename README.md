@@ -48,21 +48,53 @@ Batch logs are spread across the last 7 days, ending when the seed command is la
 Kibana: <http://localhost:5601>  
 Elasticsearch: <http://localhost:9200>
 
-## Continuous Generator
+## Generator
 
-For the graded reproducible demo, use the seed command:
+The provided generator supports two modes:
 
 ```bash
-./scripts/seed.sh 5000
+python3 generator/generate.py --batch 5000
 ```
 
-If you want to simulate real-time logs manually, run the original generator without `--batch`:
+This appends a batch of 5000 transaction events, plus related auth and ATM lines, then exits.
 
 ```bash
 python3 generator/generate.py
 ```
 
-This writes new log lines continuously with current timestamps. Stop it with `Ctrl+C`.
+This appends logs continuously with current timestamps. Run it in a dedicated terminal window because it does not stop by itself. Stop it with `Ctrl+C`.
+
+The project also provides a small wrapper:
+
+```bash
+./scripts/seed.sh 5000
+```
+
+`seed.sh` does not clean existing logs or Elasticsearch indices. It only runs the batch generator and prints useful count commands.
+
+## Cleaning
+
+Cleaning is explicit. Choose what you want to reset.
+
+Delete generated log files only:
+
+```bash
+./scripts/clean-logs.sh
+```
+
+Delete project Elasticsearch indices only:
+
+```bash
+./scripts/clean-indices.sh
+```
+
+For a fresh validation run:
+
+```bash
+./scripts/clean-logs.sh
+./scripts/clean-indices.sh
+./scripts/seed.sh 5000
+```
 
 Do not use continuous mode for the acceptance count, because generated line counts keep increasing.
 
@@ -83,6 +115,8 @@ business indices + dead-letter = generated lines
 
 The CSV header is routed to `bank-deadletter-*` with reason `csv_header` so the line count remains auditable.
 
+For a clean acceptance count, run `clean-logs.sh` and `clean-indices.sh` before `seed.sh`.
+
 ## Included Generator
 
 The original `bank-transactions` generator is included in this repository:
@@ -92,7 +126,7 @@ generator/generate.py
 logs/.gitkeep
 ```
 
-Generated log files are ignored by Git. They are recreated by `./scripts/seed.sh`.
+Generated log files are ignored by Git. Use `scripts/clean-logs.sh` when you want to delete them.
 
 ## Dashboard Questions
 

@@ -18,6 +18,14 @@ The project statement says there must be no silent data loss. Every generated li
 
 ## Commands
 
+For a clean validation run:
+
+```bash
+./scripts/clean-logs.sh
+./scripts/clean-indices.sh
+./scripts/seed.sh 5000
+```
+
 Generated input lines:
 
 ```bash

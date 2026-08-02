@@ -23,6 +23,14 @@ total indexed docs: 8747
 
 Continuous generation remains manual: run `python3 generator/generate.py` only when real-time simulation is needed. Do not use continuous mode for the fixed acceptance count.
 
+Cleaning is split by intent:
+
+```text
+scripts/clean-logs.sh     deletes generated log files
+scripts/clean-indices.sh  deletes project Elasticsearch indices
+scripts/seed.sh           appends a deterministic batch and stops
+```
+
 ## Status Legend
 
 | Status | Meaning |
@@ -51,7 +59,7 @@ Continuous generation remains manual: run `python3 generator/generate.py` only w
 
 Next action:
 
-Run `./scripts/seed.sh 5000`, set Kibana's time range to `Last 8 days`, then build the dashboard panels for the 8 bank-transactions business questions.
+For a clean validation run, use `./scripts/clean-logs.sh`, `./scripts/clean-indices.sh`, then `./scripts/seed.sh 5000`. Set Kibana's time range to `Last 8 days`, then build the dashboard panels for the 8 bank-transactions business questions.
 
 ## Commit Checklist
 
@@ -77,6 +85,13 @@ Generate a deterministic batch:
 
 ```bash
 ./scripts/seed.sh 5000
+```
+
+Clean logs and indices separately:
+
+```bash
+./scripts/clean-logs.sh
+./scripts/clean-indices.sh
 ```
 
 Check index counts:

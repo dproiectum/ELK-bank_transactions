@@ -26,6 +26,13 @@ project-status/
 scripts/
 ```
 
+- Cleaning scripts are separated by intent:
+
+```text
+scripts/clean-logs.sh
+scripts/clean-indices.sh
+```
+
 - `.env` sets a Docker Compose project name compatible with Docker naming rules:
 
 ```text
@@ -42,3 +49,5 @@ None for this phase.
 - [`generator/generate.py`](../generator/generate.py)
 - [`logs/.gitignore`](../logs/.gitignore)
 - [`scripts/seed.sh`](../scripts/seed.sh)
+- [`scripts/clean-logs.sh`](../scripts/clean-logs.sh)
+- [`scripts/clean-indices.sh`](../scripts/clean-indices.sh)

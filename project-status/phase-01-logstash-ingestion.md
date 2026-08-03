@@ -31,6 +31,7 @@ bank-deadletter-*
 - Auth events include GeoIP enrichment on `client_ip`.
 - Malformed lines are routed to `bank-deadletter-*`.
 - Original lines are preserved in `raw_line`.
+- Parsed events are printed in Logstash logs with `stdout { codec => rubydebug }`, like in Lab 2.
 
 ## Problem Found
 

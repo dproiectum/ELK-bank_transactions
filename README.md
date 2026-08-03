@@ -118,6 +118,16 @@ The CSV header is routed to `bank-deadletter-*` with reason `csv_header` so the 
 
 For a clean acceptance count, run `clean-logs.sh` and `clean-indices.sh` before `seed.sh`.
 
+## Logstash Debug Output
+
+The pipeline prints events with the `rubydebug` codec, like in Lab 2. To inspect parsed events:
+
+```bash
+docker compose logs -f logstash
+```
+
+You should run this command from the project root, where `docker-compose.yml` is located.
+
 ## Included Generator
 
 The original `bank-transactions` generator is included in this repository:

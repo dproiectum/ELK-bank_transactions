@@ -29,6 +29,7 @@ Cleaning is split by intent:
 scripts/clean-logs.sh     deletes generated log files
 scripts/clean-indices.sh  deletes project Elasticsearch indices
 scripts/seed.sh           appends a deterministic batch and stops
+scripts/stream.sh         starts continuous generation with a clear message
 ```
 
 ## Status Legend

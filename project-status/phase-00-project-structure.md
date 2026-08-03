@@ -31,7 +31,10 @@ scripts/
 ```text
 scripts/clean-logs.sh
 scripts/clean-indices.sh
+scripts/stream.sh
 ```
+
+`stream.sh` wraps the original continuous generator and reports progress every 100 new log lines without modifying `generator/generate.py`.
 
 - `.env` sets a Docker Compose project name compatible with Docker naming rules:
 
@@ -51,3 +54,4 @@ None for this phase.
 - [`scripts/seed.sh`](../scripts/seed.sh)
 - [`scripts/clean-logs.sh`](../scripts/clean-logs.sh)
 - [`scripts/clean-indices.sh`](../scripts/clean-indices.sh)
+- [`scripts/stream.sh`](../scripts/stream.sh)

@@ -64,13 +64,21 @@ python3 generator/generate.py
 
 This appends logs continuously with current timestamps. Run it in a dedicated terminal window because it does not stop by itself. Stop it with `Ctrl+C`.
 
+You can also use the small streaming wrapper:
+
+```bash
+./scripts/stream.sh
+```
+
+It prints where logs are written, runs the original continuous generator, and reports progress every 100 new lines.
+
 The project also provides a small wrapper:
 
 ```bash
 ./scripts/seed.sh 5000
 ```
 
-`seed.sh` does not clean existing logs or Elasticsearch indices. It only runs the batch generator and prints useful count commands.
+`seed.sh` does not clean existing logs or Elasticsearch indices. It only runs the batch generator and prints how many lines were added to each log file.
 
 
 ## Cleaning

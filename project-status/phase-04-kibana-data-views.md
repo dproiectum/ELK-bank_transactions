@@ -35,4 +35,4 @@ Validated through the Kibana API:
 ## Remaining Work
 
 - None for data view creation.
-- During dashboard work, confirm time filters include the generated dates. `Last 8 days` should work because batch logs cover the last 7 days.
+- During dashboard work, confirm time filters include `2026-07-26`, because the provided generator's batch starts on that date.

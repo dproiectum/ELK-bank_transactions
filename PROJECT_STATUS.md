@@ -10,15 +10,15 @@ Update this file and the relevant phase file before each meaningful commit.
 
 Phase 1 ingestion, Phase 2 mappings, Phase 3 acceptance count, and Phase 4 Kibana data views are validated. The next step is to build the dashboard answering the 8 business questions.
 
-Note: batch logs are spread across the last 7 days, ending when the seed command is launched. The generator uses a realistic hourly/day curve inspired by Lab 3, so Kibana can use a relative time range such as `Last 8 days`.
+Note: `generator/generate.py` is kept unchanged from the provided `bank-transactions` kit. Batch logs start on `2026-07-26`, so Kibana must use an absolute time range including that date.
 
 Latest validated seed:
 
 ```text
-generated lines: 8747
-indexed business docs: 8575
-dead-letter docs: 172
-total indexed docs: 8747
+generated lines: 8772
+indexed business docs: 8602
+dead-letter docs: 170
+total indexed docs: 8772
 ```
 
 Continuous generation remains manual: run `python3 generator/generate.py` only when real-time simulation is needed. Do not use continuous mode for the fixed acceptance count.
@@ -59,7 +59,7 @@ scripts/seed.sh           appends a deterministic batch and stops
 
 Next action:
 
-For a clean validation run, use `./scripts/clean-logs.sh`, `./scripts/clean-indices.sh`, then `./scripts/seed.sh 5000`. Set Kibana's time range to `Last 8 days`, then build the dashboard panels for the 8 bank-transactions business questions.
+For a clean validation run, use `./scripts/clean-logs.sh`, `./scripts/clean-indices.sh`, then `./scripts/seed.sh 5000`. Set Kibana's time range to include `2026-07-26`, then build the dashboard panels for the 8 bank-transactions business questions.
 
 ## Commit Checklist
 

@@ -33,9 +33,9 @@ matching auth failures from IPs around 181.214.200-210.x
 
 ## Remaining Work
 
-- Rerun `./scripts/seed.sh 5000` after the batch timestamp change.
-- Set Kibana's time range to `Last 8 days`.
-- Use 1-hour or 12-hour intervals for time charts so the 7-day distribution is readable.
+- Rerun `./scripts/seed.sh 5000` after restoring the provided generator.
+- Set Kibana's time range to include `2026-07-26`.
+- Use seconds or 1-minute intervals for time charts if the batch looks compressed.
 - Create dashboard panels.
 - Make sure each panel answers a specific question.
 - Add a screenshot to the README when final.
@@ -59,8 +59,8 @@ The detailed panel plan is documented in [`kibana/DASHBOARD_PLAN.md`](../kibana/
 Current validated fraud signal:
 
 ```text
-Declined card-not-present transactions: 455
-US declined card-not-present transactions: 335
-suspected_fraud reason: 357
+Declined card-not-present transactions: 454
+US declined card-not-present transactions: 326
+suspected_fraud reason: 352
 Auth failures concentrate in IP prefixes 181.214.200.x to 181.214.210.x.
 ```

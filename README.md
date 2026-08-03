@@ -43,7 +43,7 @@ docker compose up -d
 ./scripts/seed.sh 5000
 ```
 
-Batch logs are spread across the last 7 days, ending when the seed command is launched. The distribution uses a realistic hourly curve: quiet nights, stronger daytime/evening traffic, and moderate day-to-day variation. In Kibana, use a relative time range such as `Last 8 days`.
+The generator is kept unchanged from the provided `bank-transactions` kit. Batch logs start on `2026-07-26`, so in Kibana use an absolute time range that includes that date.
 
 Kibana: <http://localhost:5601>  
 Elasticsearch: <http://localhost:9200>
@@ -71,6 +71,7 @@ The project also provides a small wrapper:
 ```
 
 `seed.sh` does not clean existing logs or Elasticsearch indices. It only runs the batch generator and prints useful count commands.
+
 
 ## Cleaning
 

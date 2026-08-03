@@ -48,37 +48,37 @@ curl -s 'http://localhost:9200/bank-deadletter-*/_search?pretty' \
 
 ## Validated Count
 
-Batch logs are spread across the last 7 days, ending when the seed command is launched. The generator uses a realistic hourly/day curve inspired by Lab 3.
+`generator/generate.py` is kept unchanged from the provided `bank-transactions` kit. Batch logs start on `2026-07-26`.
 
 The latest generated input files contain:
 
 ```text
 transactions.log    5000 lines
-auth.log            3003 lines
-atm.csv              744 lines
-total               8747 lines
+auth.log            3017 lines
+atm.csv              755 lines
+total               8772 lines
 ```
 
 Validated Elasticsearch counts are:
 
 ```text
-bank-transactions-*  4895
-bank-auth-*          2937
-bank-atm-*            743
-bank-deadletter-*     172
+bank-transactions-*  4888
+bank-auth-*          2960
+bank-atm-*            754
+bank-deadletter-*     170
 ```
 
 Total indexed documents:
 
 ```text
-4895 + 2937 + 743 + 172 = 8747
+4888 + 2960 + 754 + 170 = 8772
 ```
 
 Acceptance rule:
 
 ```text
 business indices + dead-letter = generated input lines
-8747 = 8747
+8772 = 8772
 ```
 
 ## Remaining Work
@@ -88,4 +88,4 @@ business indices + dead-letter = generated input lines
 
 ## Validated Counts
 
-Validated after the 7-day distribution update on 2026-08-01.
+Validated with the provided generator timestamps on 2026-08-01.

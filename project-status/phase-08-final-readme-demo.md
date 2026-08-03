@@ -23,11 +23,12 @@ Make the repository understandable and reproducible for grading and GitHub reade
 
 ```bash
 docker compose up -d
-./scripts/seed.sh 5000
+./scripts/seed.sh
+python3 generator/generate.py --batch 5000
 ```
 
 - Rehearse the defense flow:
 
 ```text
-start stack -> seed data -> show dashboard -> trigger/show alert -> explain choices
+start stack -> reset project -> generate data manually -> show dashboard -> trigger/show alert -> explain choices
 ```

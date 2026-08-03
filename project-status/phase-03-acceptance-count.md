@@ -21,9 +21,8 @@ The project statement says there must be no silent data loss. Every generated li
 For a clean validation run:
 
 ```bash
-./scripts/clean-logs.sh
-./scripts/clean-indices.sh
-./scripts/seed.sh 5000
+./scripts/seed.sh
+python3 generator/generate.py --batch 5000
 ```
 
 Generated input lines:

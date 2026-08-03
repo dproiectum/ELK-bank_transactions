@@ -32,9 +32,12 @@ scripts/
 scripts/clean-logs.sh
 scripts/clean-indices.sh
 scripts/stream.sh
+scripts/shift-log-window.py
 ```
 
 `stream.sh` wraps the original continuous generator and reports progress every 100 new log lines without modifying `generator/generate.py`.
+
+`shift-log-window.py` optionally rewrites timestamps in generated log files from `2026-07-27` through yesterday, so dashboards can span historical days without modifying `generator/generate.py`. Today's date is left for continuous generation.
 
 - `.env` sets a Docker Compose project name compatible with Docker naming rules:
 
@@ -55,3 +58,4 @@ None for this phase.
 - [`scripts/clean-logs.sh`](../scripts/clean-logs.sh)
 - [`scripts/clean-indices.sh`](../scripts/clean-indices.sh)
 - [`scripts/stream.sh`](../scripts/stream.sh)
+- [`scripts/shift-log-window.py`](../scripts/shift-log-window.py)

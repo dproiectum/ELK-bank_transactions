@@ -11,7 +11,7 @@ PATTERNS=(
 )
 
 for pattern in "${PATTERNS[@]}"; do
-  indices="$(curl -s "$ES/_cat/indices/$pattern?h=index" || true)"
+  indices="$(curl -s "$ES/_cat/indices/$pattern?h=index&expand_wildcards=open&allow_no_indices=true&ignore_unavailable=true" || true)"
   if [[ -z "$indices" ]]; then
     echo "No indices for $pattern"
     continue

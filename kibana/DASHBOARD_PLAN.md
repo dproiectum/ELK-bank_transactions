@@ -10,6 +10,14 @@ Set the global time range to include the generated logs:
 
 Batch mode uses the timestamps produced by the provided generator. Continuous mode uses current timestamps. The generated batch is short, so use a small interval such as seconds or 1 minute when a time chart looks compressed.
 
+If `scripts/shift-log-window.py --start 2026-07-26 --days 7` was applied, use:
+
+```text
+2026-07-26 00:00:00 to 2026-08-02 00:00:00
+```
+
+Then use a wider interval such as 1 hour or 12 hours.
+
 ## Data Views
 
 | Data view | Main use |

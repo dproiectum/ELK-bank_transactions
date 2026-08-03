@@ -21,6 +21,8 @@ dead-letter docs: 170
 total indexed docs: 8772
 ```
 
+Docker startup is infrastructure-only: `docker compose up -d` creates/starts the ELK containers and does not generate log lines. Both batch and continuous log generation remain manual user actions.
+
 Continuous generation remains manual: run `python3 generator/generate.py` only when real-time simulation is needed. Do not use continuous mode for the fixed acceptance count.
 
 Cleaning is split by intent:
@@ -28,8 +30,9 @@ Cleaning is split by intent:
 ```text
 scripts/clean-logs.sh     deletes generated log files
 scripts/clean-indices.sh  deletes project Elasticsearch indices
-scripts/seed.sh           appends a deterministic batch and stops
+scripts/seed.sh           resets logs and project indices; does not generate logs
 scripts/stream.sh         starts continuous generation with a clear message
+scripts/shift-log-window.py optionally spreads generated timestamps from 2026-07-27 through yesterday
 ```
 
 ## Status Legend
@@ -60,7 +63,7 @@ scripts/stream.sh         starts continuous generation with a clear message
 
 Next action:
 
-For a clean validation run, use `./scripts/clean-logs.sh`, `./scripts/clean-indices.sh`, then `./scripts/seed.sh 5000`. Set Kibana's time range to include `2026-07-26`, then build the dashboard panels for the 8 bank-transactions business questions.
+For a clean validation run, use `./scripts/seed.sh`, then manually run `python3 generator/generate.py --batch 5000`. If a wider historical dashboard is needed, run `python3 scripts/shift-log-window.py` before restarting Logstash. Set Kibana's time range to include the generated historical period, then build the dashboard panels for the 8 bank-transactions business questions.
 
 ## Commit Checklist
 
@@ -85,7 +88,13 @@ docker compose up -d
 Generate a deterministic batch:
 
 ```bash
-./scripts/seed.sh 5000
+python3 generator/generate.py --batch 5000
+```
+
+Reset logs and indices:
+
+```bash
+./scripts/seed.sh
 ```
 
 Clean logs and indices separately:

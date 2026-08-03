@@ -33,7 +33,7 @@ matching auth failures from IPs around 181.214.200-210.x
 
 ## Remaining Work
 
-- Rerun `./scripts/seed.sh 5000` after restoring the provided generator.
+- Run `./scripts/seed.sh`, then manually run `python3 generator/generate.py --batch 5000` after restoring the provided generator.
 - Set Kibana's time range to include `2026-07-26`.
 - Use seconds or 1-minute intervals for time charts if the batch looks compressed.
 - Create dashboard panels.

@@ -128,7 +128,8 @@ Result
 | **5** | Lyon | 106,060 |
 | **6** | Bordeaux | 102,000 |
 
-fdsfds
+
+
 
 
 ## ATM error rate
@@ -278,14 +279,46 @@ FROM bank-auth-*
 | SORT auth_count DESC
 ```
 
+## Fraud Investigation Conclusion
+
+A fraud attack was identified on **26 July 2026**, during a short period between **00:00 and 03:00 UTC**. The analysis of declined transactions flagged as `suspected_fraud` indicates that the majority of suspicious activity originated from the **United States**.
+
+The fraud signature is characterized by the following indicators:
+
+- **High-value transactions:** The investigation focused on transactions above the **95th percentile (€1.16k)** of normal approved payments. The median amount of suspected fraud transactions (**€1.22k**) already exceeds this threshold, indicating that the attack targeted unusually large payment amounts.
+- **Fraud confirmation:** All investigated transactions were marked as **`status = declined`** with **`reason = suspected_fraud`**.
+- **Geographic concentration:** Most suspected fraud transactions originated from the **United States**.
+- **Payment type:** The majority of fraudulent transactions were **Card Not Present (CNP)**, suggesting that the attack primarily targeted remote payment scenarios.
+- **Merchant distribution:** Fraudulent transactions were distributed across multiple merchants rather than concentrated on a single merchant, suggesting a **distributed fraud campaign** rather than the compromise of one specific merchant.
+
+**Conclusion:**  
+The combination of **high-value transactions**, **U.S. origin**, **Card Not Present payments**, and **confirmed fraud detection (`suspected_fraud`)** forms a consistent signature of the detected fraud attack.
 
 
 
 # 8. What share of lines were unparseable (dead-letter) today?
 
+```
+FROM bank-* METADATA _index
+| WHERE @timestamp >= TO_DATETIME("2026-08-03T00:00:00+02:00")
+  AND @timestamp < TO_DATETIME("2026-08-04T00:00:00+02:00")
+| EVAL is_deadletter = CASE(
+    _index LIKE "bank-deadletter-*",
+    1,
+    0
+  )
+| STATS
+    total_lines = COUNT(*),
+    deadletter_lines = SUM(is_deadletter)BY 
+| EVAL unparseable_share_pct =
+    ROUND(deadletter_lines * 1.00000/ total_lines, 6)
+```
 
 
 
+### Dead-letter Rate
+
+On 3 August 2026, approximately **18.55k out of 1.00 million ingested lines** were unparseable and redirected to the dead-letter index. This represents an unparseable share of approximately **1.85%**.
 
 
 

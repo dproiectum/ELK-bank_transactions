@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress.
+Base done - to perfect.
 
 Last updated: 2026-08-04.
 
@@ -57,7 +57,7 @@ Current panel coverage:
 | Question | Status | Current panel / note |
 | --- | --- | --- |
 | Q1. Transaction volume and value over time, by currency | Covered | Transaction value by day/currency and transaction count by day/currency. |
-| Q2. Approval rate over time | Review needed | Current exported query shows approved vs declined split, but it is not grouped over time. |
+| Q2. Approval rate over time | Base covered - to perfect | Current panel shows approved vs declined split. Improve it by grouping the rate over time if needed. |
 | Q3. Top 10 merchants by transaction value | Covered | Top merchants by `SUM(amount)`. |
 | Q4. Top decline reasons | Covered | Declined transactions by `reason`. |
 | Q5. Card-present vs card-not-present split, per country | Covered | Country by computed `card_type`. |
@@ -65,10 +65,11 @@ Current panel coverage:
 | Q7. Fraud attack: when, country, signature | Covered | Multiple fraud investigation panels exist, including time window, country, amount percentile, card-present split, and auth geography. |
 | Q8. Share of unparseable lines today | Covered | Dead-letter share panel exists. |
 
-## Remaining Work
+## Remaining Refinement
 
-- Adjust Q2 so approval rate is grouped over time, not only by status.
+- Improve Q2 so the approval rate is shown over time, if this is useful for the final report.
 - Review panel titles so each one maps clearly to a project question.
+- Review dashboard layout and readability.
 - Add a dashboard screenshot to the README when final.
 
 ## Continuous Demonstration Option

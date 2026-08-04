@@ -8,6 +8,16 @@ Partial.
 
 Make the repository understandable and reproducible for grading and GitHub readers.
 
+Last updated: 2026-08-04.
+
+Current project position:
+
+```text
+Phases 0-4 are validated.
+Phases 5-7 have a working base.
+Phase 8 will be completed together with the final report.
+```
+
 ## Done
 
 - README exists.

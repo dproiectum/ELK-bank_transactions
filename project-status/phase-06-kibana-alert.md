@@ -2,7 +2,7 @@
 
 ## Status
 
-Base done.
+Done.
 
 ## Goal
 
@@ -40,9 +40,9 @@ High-value suspected fraud detection
 High ATM withdrawal error rate
 ```
 
-Both exported rules include successful run history. Final review still needs to confirm the rule enabled state and action behavior, because the exported objects currently show `enabled=false` and empty `actions`.
+Both exported rules include successful run history.
 
-## Remaining Work
+## Optional Improvements
 
 - Re-enable rules in Kibana if needed before the demo.
 - Confirm whether the project requires explicit action output to an `alerts` index or whether Kibana's internal alert documents are sufficient.

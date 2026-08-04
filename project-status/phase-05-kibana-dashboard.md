@@ -4,6 +4,8 @@
 
 In progress.
 
+Last updated: 2026-08-04.
+
 ## Goal
 
 Build one dashboard answering the 8 business questions from the bank-transactions kit.
@@ -31,14 +33,43 @@ reason=suspected_fraud
 matching auth failures from IPs around 181.214.200-210.x
 ```
 
+Interpretation for the dashboard:
+
+```text
+Transactions show the business signature:
+country=US, card_present=false, status=declined, reason=suspected_fraud, high amount.
+
+Auth logs confirm the technical/network signature:
+web authentication failures from IPs around 181.214.200.x to 181.214.210.x.
+```
+
+## Current Dashboard Checkpoint
+
+Kibana saved dashboard:
+
+```text
+Dashboard banking transactions
+Saved panels: 16
+```
+
+Current panel coverage:
+
+| Question | Status | Current panel / note |
+| --- | --- | --- |
+| Q1. Transaction volume and value over time, by currency | Covered | Transaction value by day/currency and transaction count by day/currency. |
+| Q2. Approval rate over time | Review needed | Current exported query shows approved vs declined split, but it is not grouped over time. |
+| Q3. Top 10 merchants by transaction value | Covered | Top merchants by `SUM(amount)`. |
+| Q4. Top decline reasons | Covered | Declined transactions by `reason`. |
+| Q5. Card-present vs card-not-present split, per country | Covered | Country by computed `card_type`. |
+| Q6. ATM cities dispensing most cash, plus ATM error rate | Covered | Cash dispensed by city and ATM error rate panels exist. |
+| Q7. Fraud attack: when, country, signature | Covered | Multiple fraud investigation panels exist, including time window, country, amount percentile, card-present split, and auth geography. |
+| Q8. Share of unparseable lines today | Covered | Dead-letter share panel exists. |
+
 ## Remaining Work
 
-- Run `./scripts/seed.sh`, then manually run `python3 generator/generate.py --batch 5000` after restoring the provided generator.
-- Set Kibana's time range to include `2026-07-26`.
-- Use seconds or 1-minute intervals for time charts if the batch looks compressed.
-- Create dashboard panels.
-- Make sure each panel answers a specific question.
-- Add a screenshot to the README when final.
+- Adjust Q2 so approval rate is grouped over time, not only by status.
+- Review panel titles so each one maps clearly to a project question.
+- Add a dashboard screenshot to the README when final.
 
 ## Continuous Demonstration Option
 

@@ -6,9 +6,20 @@ Update this file and the relevant phase file before each meaningful commit.
 
 ## Current Phase
 
-**Phase 5 - Kibana dashboard** is the current phase.
+**Phase 5 - Kibana dashboard final review** is the current phase.
 
-Phase 1 ingestion, Phase 2 mappings, Phase 3 acceptance count, and Phase 4 Kibana data views are validated. The next step is to build the dashboard answering the 8 business questions.
+Phase 1 ingestion, Phase 2 mappings, Phase 3 acceptance count, Phase 4 Kibana data views, and Phase 7 saved-object export are validated. The current work is final review of the dashboard and alert configuration before the final README/demo phase.
+
+Latest dashboard checkpoint:
+
+```text
+Dashboard: Dashboard banking transactions
+Saved panels: 16
+Covered: Q1, Q3, Q4, Q5, Q6, Q7, Q8
+Review note: Q2 panel exists, but the exported query groups by status only, not by time.
+Export: kibana/dashboard.ndjson contains dashboard, 4 data views, and 2 alert rules.
+Alert review note: exported alert rules are present and have succeeded runs, but are exported as disabled and without actions.
+```
 
 Note: `generator/generate.py` is kept unchanged from the provided `bank-transactions` kit. Batch logs start on `2026-07-26`, so Kibana must use an absolute time range including that date.
 
@@ -54,16 +65,16 @@ scripts/shift-log-window.py optionally spreads generated timestamps from 2026-07
 | 2. Elasticsearch mappings | Done | [phase-02-elasticsearch-mappings.md](project-status/phase-02-elasticsearch-mappings.md) | Explicit mappings are validated on the real indices. |
 | 3. Acceptance count | Done | [phase-03-acceptance-count.md](project-status/phase-03-acceptance-count.md) | Validated: indexed documents equal generated lines. |
 | 4. Kibana data views | Done | [phase-04-kibana-data-views.md](project-status/phase-04-kibana-data-views.md) | Data views were created through the Kibana API. |
-| 5. Kibana dashboard | **In progress** | [phase-05-kibana-dashboard.md](project-status/phase-05-kibana-dashboard.md) | Dashboard must answer the 8 business questions. |
-| 6. Kibana alert | Not started | [phase-06-kibana-alert.md](project-status/phase-06-kibana-alert.md) | Fraud alert must write to `alerts`. |
-| 7. Export saved objects | Not started | [phase-07-export-saved-objects.md](project-status/phase-07-export-saved-objects.md) | Export dashboard/rule to `kibana/dashboard.ndjson`. |
+| 5. Kibana dashboard | **In progress** | [phase-05-kibana-dashboard.md](project-status/phase-05-kibana-dashboard.md) | 16 panels exported covering Q1-Q8; Q2 should be reviewed because it is not grouped over time. |
+| 6. Kibana alert | Base done | [phase-06-kibana-alert.md](project-status/phase-06-kibana-alert.md) | 2 alert rules exported with successful runs; verify enabled state/action behavior before final demo. |
+| 7. Export saved objects | Done | [phase-07-export-saved-objects.md](project-status/phase-07-export-saved-objects.md) | `kibana/dashboard.ndjson` contains dashboard, data views, and alert rules. |
 | 8. Final README and demo rehearsal | Partial | [phase-08-final-readme-demo.md](project-status/phase-08-final-readme-demo.md) | README exists but needs final validation counts and defense notes. |
 
 ## Next Actions
 
 Next action:
 
-For a clean validation run, use `./scripts/seed.sh`, then manually run `python3 generator/generate.py --batch 5000`. If a wider historical dashboard is needed, run `python3 scripts/shift-log-window.py` before restarting Logstash. Set Kibana's time range to include the generated historical period, then build the dashboard panels for the 8 bank-transactions business questions.
+Finish final review by adjusting Q2 to be truly over time, confirming alert enabled/action behavior, and adding final proof/screenshots for the README.
 
 ## Commit Checklist
 

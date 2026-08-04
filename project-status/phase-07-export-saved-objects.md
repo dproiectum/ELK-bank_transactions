@@ -2,11 +2,13 @@
 
 ## Status
 
-Not started.
+Done.
 
 ## Goal
 
 Export Kibana saved objects so the dashboard can be imported during grading.
+
+Last updated: 2026-08-04.
 
 ## Required Output
 
@@ -14,8 +16,18 @@ Export Kibana saved objects so the dashboard can be imported during grading.
 kibana/dashboard.ndjson
 ```
 
+## Export Contents
+
+Validated contents:
+
+```text
+1 dashboard: Dashboard banking transactions
+4 data views: bank-transactions-*, bank-auth-*, bank-atm-*, bank-deadletter-*
+2 alert rules: High-value suspected fraud detection, High ATM withdrawal error rate
+```
+
+The original downloaded export is also kept at `kibana/export/export.ndjson`.
+
 ## Remaining Work
 
-- Export dashboard.
-- Include required data views and alert rule if needed.
-- Test import on a fresh stack if possible.
+- Optional: test import on a fresh stack if time allows.

@@ -1,7 +1,5 @@
 # ELK-bank_transactions
 
-Project progress is tracked in [PROJECT_STATUS.md](PROJECT_STATUS.md).
-Dashboard planning is documented in [kibana/DASHBOARD_PLAN.md](kibana/DASHBOARD_PLAN.md).
 Raw log fields are documented in [logs/LOG_FIELDS.md](logs/LOG_FIELDS.md).
 
 ## Architecture
@@ -41,25 +39,18 @@ From this directory:
 
 ```bash
 docker compose up -d
+./scripts/seed.sh 5000
 ```
 
-This only creates and starts the ELK containers. It does not generate new log lines. Log generation is always a user decision.
+The first command creates and starts the ELK containers. The second command resets generated logs and project Elasticsearch indices, then runs the provided generator in batch mode.
 
 Kibana: <http://localhost:5601>  
 Elasticsearch: <http://localhost:9200>
 
-When you want to reset the project to zero, run:
+When you want to reset and seed again, run:
 
 ```bash
-./scripts/seed.sh
-```
-
-This deletes generated log files and project Elasticsearch indices. It does not generate new logs.
-
-When you decide to add a fixed batch of logs, run the provided generator manually:
-
-```bash
-python3 generator/generate.py --batch 5000
+./scripts/seed.sh 5000
 ```
 
 The generator is kept unchanged from the provided `bank-transactions` kit. Batch logs start on `2026-07-26`, so in Kibana use an absolute time range that includes that date.
@@ -80,66 +71,15 @@ python3 generator/generate.py
 
 This appends logs continuously with current timestamps. Run it in a dedicated terminal window because it does not stop by itself. Stop it with `Ctrl+C`.
 
-You can also use the small streaming wrapper:
-
-```bash
-./scripts/stream.sh
-```
-
-It prints where logs are written, runs the original continuous generator, and reports progress every 100 new lines.
-
 The project also provides a reset wrapper:
 
 ```bash
-./scripts/seed.sh
+./scripts/seed.sh 5000
 ```
 
-`seed.sh` cleans existing generated logs and Elasticsearch project indices. It does not call the generator. Batch generation remains a manual user action.
+`seed.sh` cleans existing generated logs and Elasticsearch project indices, then calls the provided generator in batch mode. The optional argument is the number of transaction events to generate; the default is `5000`.
 
 Important: `generator/generate.py` is part of the provided subject and should not be modified.
-
-## Optional Time Window Shift
-
-The provided generator is intentionally kept unchanged. By default, its batch data is concentrated around `2026-07-26`.
-
-If you want a dashboard spread across several historical days without modifying the subject generator, first generate logs, then shift timestamps in the generated files:
-
-```bash
-python3 generator/generate.py --batch 5000
-python3 scripts/shift-log-window.py
-```
-
-This rewrites timestamps in:
-
-```text
-logs/transactions.log
-logs/auth.log
-logs/atm.csv
-```
-
-It preserves the generated lines and formats, but spreads valid timestamps from `2026-07-27` to yesterday. Today's date is intentionally excluded, so continuous generation can use current timestamps without mixing with the historical batch.
-
-The default distribution tries to vary each day between 3000 and 10000 timestamps. If the existing files contain too few or too many timestamps to respect that range exactly, the script keeps the same total number of lines and prints a note explaining that daily counts were scaled.
-
-Examples:
-
-```bash
-# Default: 2026-07-27 through yesterday
-python3 scripts/shift-log-window.py
-
-# Explicit period
-python3 scripts/shift-log-window.py --start 2026-07-27 --end 2026-08-02
-
-# Explicit number of days from the start date
-python3 scripts/shift-log-window.py --start 2026-07-27 --days 7
-```
-
-After shifting timestamps, reset Elasticsearch indices and restart Logstash so the rewritten files are indexed again:
-
-```bash
-./scripts/clean-indices.sh
-docker compose restart logstash
-```
 
 ## Cleaning
 
@@ -160,8 +100,7 @@ Delete project Elasticsearch indices only:
 For a fresh validation run:
 
 ```bash
-./scripts/seed.sh
-python3 generator/generate.py --batch 5000
+./scripts/seed.sh 5000
 ```
 
 Do not use continuous mode for the acceptance count, because generated line counts keep increasing.
@@ -183,7 +122,7 @@ business indices + dead-letter = generated lines
 
 The CSV header is routed to `bank-deadletter-*` with reason `csv_header` so the line count remains auditable.
 
-For a clean acceptance count, run `./scripts/seed.sh`, then run `python3 generator/generate.py --batch 5000`.
+For a clean acceptance count, run `./scripts/seed.sh 5000`.
 
 ## Logstash Debug Output
 
@@ -208,7 +147,7 @@ Generated log files are ignored by Git. Use `scripts/clean-logs.sh` when you wan
 
 ## Dashboard Questions
 
-Build one Kibana dashboard answering these 8 questions:
+The dashboard must answer these 8 questions:
 
 1. Transaction volume and value over time, by currency.
 2. Approval rate over time.
@@ -218,6 +157,22 @@ Build one Kibana dashboard answering these 8 questions:
 6. ATM cities dispensing the most cash, plus ATM error rate.
 7. Fraud attack: when, from which country, and signature.
 8. Share of unparseable lines today.
+
+Proposed solution: the full dashboard analysis, including ES|QL queries, screenshots, and conclusions, is documented in [kibana/Case analysis.md](kibana/Case%20analysis.md).
+
+Dashboard preview:
+
+![Dashboard banking transactions - 25 to 31 July 2026](kibana/screenshots/Dashboard%20banking%20transactions%20-%2025%20to%2031%20July%202026.jpeg)
+
+## Kibana Saved Objects
+
+The Kibana export file is:
+
+```text
+kibana/dashboard.ndjson
+```
+
+It contains the banking dashboard, the 4 data views, the required alert rule, and the index connector used to write alert actions into the `alerts` index.
 
 ## Alert
 
@@ -231,6 +186,12 @@ Filter:
   status: declined
   card_present: false
 Action: write to alerts index
+```
+
+The required saved rule is exported in `kibana/dashboard.ndjson` as:
+
+```text
+Required - Declined card-not-present burst
 ```
 
 The generated anomaly should appear around the middle/end part of the batch. It is a burst of declined card-not-present transactions from `US`, usually with `reason=suspected_fraud`, and matching auth failures from the `181.214.200.0/21`-like IP range.

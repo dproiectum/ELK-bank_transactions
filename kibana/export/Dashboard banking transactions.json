@@ -1,0 +1,1571 @@
+{
+  "description": "",
+  "options": {
+    "auto_apply_filters": true,
+    "hide_panel_borders": false,
+    "hide_panel_titles": false,
+    "sync_colors": false,
+    "sync_cursor": true,
+    "sync_tooltips": false,
+    "use_margins": true
+  },
+  "tags": [],
+  "title": "Dashboard banking transactions",
+  "filters": [],
+  "query": {
+    "expression": "",
+    "language": "kql"
+  },
+  "panels": [
+    {
+      "grid": {
+        "y": 0,
+        "x": 0,
+        "w": 12,
+        "h": 10
+      },
+      "config": {
+        "title": "q1. Transaction value over time, by currency",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar",
+            "data_source": {
+              "type": "esql",
+              "query": "\nFROM bank-transactions-*\n| EVAL day = DATE_FORMAT(\"yyyy-MM-dd\", @timestamp)\n| STATS\n    transaction_value = SUM(amount)\n  BY day, currency\n| SORT day ASC, currency ASC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "day"
+            },
+            "y": [
+              {
+                "column": "transaction_value"
+              }
+            ],
+            "breakdown_by": {
+              "column": "currency",
+              "color": {
+                "mode": "categorical",
+                "palette": "kibana_v7_legacy",
+                "mapping": [
+                  {
+                    "values": [
+                      "EUR"
+                    ],
+                    "color": {
+                      "type": "from_palette",
+                      "palette": "kibana_v7_legacy",
+                      "index": 3
+                    }
+                  },
+                  {
+                    "values": [
+                      "GBP"
+                    ],
+                    "color": {
+                      "type": "from_palette",
+                      "palette": "kibana_v7_legacy",
+                      "index": 6
+                    }
+                  },
+                  {
+                    "values": [
+                      "USD"
+                    ],
+                    "color": {
+                      "type": "from_palette",
+                      "palette": "kibana_v7_legacy",
+                      "index": 0
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y": {
+            "title": {
+              "text": "Value",
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "bcb69f8b-6f9b-484a-96ab-d0ccd45b02d6",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 0,
+        "x": 12,
+        "w": 12,
+        "h": 10
+      },
+      "config": {
+        "title": "q1. Transaction count over time by currency",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-transactions-*\n| EVAL day = DATE_FORMAT(\"yyyy-MM-dd\", @timestamp)\n| STATS\n    transaction_count = COUNT(*)\n  BY day, currency\n| SORT day ASC, currency ASC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "day"
+            },
+            "y": [
+              {
+                "column": "transaction_count"
+              }
+            ],
+            "breakdown_by": {
+              "column": "currency",
+              "color": {
+                "mode": "categorical",
+                "palette": "kibana_v7_legacy",
+                "mapping": [
+                  {
+                    "values": [
+                      "EUR"
+                    ],
+                    "color": {
+                      "type": "from_palette",
+                      "palette": "kibana_v7_legacy",
+                      "index": 3
+                    }
+                  },
+                  {
+                    "values": [
+                      "USD"
+                    ],
+                    "color": {
+                      "type": "from_palette",
+                      "palette": "kibana_v7_legacy",
+                      "index": 1
+                    }
+                  },
+                  {
+                    "values": [
+                      "GBP"
+                    ],
+                    "color": {
+                      "type": "from_palette",
+                      "palette": "kibana_v7_legacy",
+                      "index": 6
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y": {
+            "title": {
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": true
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "6e89633e-f7e8-43e1-b99c-41dae96bc113",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 0,
+        "x": 24,
+        "w": 8,
+        "h": 10
+      },
+      "config": {
+        "title": "q2. Approved vs Declined rate over time",
+        "type": "pie",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "column": "transaction_count"
+          }
+        ],
+        "group_by": [
+          {
+            "column": "status",
+            "color": {
+              "mode": "categorical",
+              "palette": "default",
+              "mapping": [
+                {
+                  "values": [
+                    "declined"
+                  ],
+                  "color": {
+                    "type": "from_palette",
+                    "palette": "default",
+                    "index": 9
+                  }
+                },
+                {
+                  "values": [
+                    "approved"
+                  ],
+                  "color": {
+                    "type": "from_palette",
+                    "palette": "default",
+                    "index": 0
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "data_source": {
+          "type": "esql",
+          "query": "FROM bank-transactions-*\n| WHERE status IN (\"approved\", \"declined\")\n| STATS transaction_count = COUNT(*) BY status\n| SORT transaction_count DESC"
+        },
+        "legend": {
+          "visibility": "auto",
+          "nested": false,
+          "size": "l"
+        },
+        "styling": {
+          "labels": {
+            "visible": true,
+            "position": "outside"
+          },
+          "values": {
+            "visible": true,
+            "mode": "percentage"
+          }
+        }
+      },
+      "id": "bfbfafa7-9266-4f3c-9449-087c92aa8801",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 0,
+        "x": 32,
+        "w": 16,
+        "h": 10
+      },
+      "config": {
+        "title": "q3. Top 10 merchants by transaction value",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_horizontal",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-transactions-*\n| STATS\n    transaction_value = SUM(amount)\n  BY merchant\n| SORT transaction_value DESC\n| LIMIT 10"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "merchant"
+            },
+            "y": [
+              {
+                "column": "transaction_value",
+                "label": "Transaction value",
+                "color": {
+                  "type": "static",
+                  "color": "#16c5c0"
+                },
+                "axis": "y2"
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y2": {
+            "title": {
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "ba8fe000-a582-4f9f-a3ea-ff0322bb9544",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 10,
+        "x": 0,
+        "w": 10,
+        "h": 10
+      },
+      "config": {
+        "title": "q4. Declined reason",
+        "type": "pie",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "column": "declined_count"
+          }
+        ],
+        "group_by": [
+          {
+            "column": "reason",
+            "label": "Reason",
+            "color": {
+              "mode": "categorical",
+              "palette": "default",
+              "mapping": [
+                {
+                  "values": [
+                    "suspected_fraud"
+                  ],
+                  "color": {
+                    "type": "from_palette",
+                    "palette": "default",
+                    "index": 6
+                  }
+                },
+                {
+                  "values": [
+                    "wrong_pin"
+                  ],
+                  "color": {
+                    "type": "from_palette",
+                    "palette": "default",
+                    "index": 9
+                  }
+                },
+                {
+                  "values": [
+                    "insufficient_funds"
+                  ],
+                  "color": {
+                    "type": "from_palette",
+                    "palette": "default",
+                    "index": 1
+                  }
+                },
+                {
+                  "values": [
+                    "expired_card"
+                  ],
+                  "color": {
+                    "type": "from_palette",
+                    "palette": "default",
+                    "index": 0
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "column": "reason",
+            "collapse_by": "sum"
+          }
+        ],
+        "data_source": {
+          "type": "esql",
+          "query": "FROM bank-transactions-*\n| WHERE status == \"declined\"\n| STATS declined_count = COUNT(*) BY reason\n| SORT declined_count DESC"
+        },
+        "legend": {
+          "visibility": "auto",
+          "nested": false
+        },
+        "styling": {
+          "donut_hole": "s",
+          "labels": {
+            "visible": true,
+            "position": "outside"
+          },
+          "values": {
+            "visible": true,
+            "mode": "absolute"
+          }
+        }
+      },
+      "id": "7a1272b1-a9fd-4368-916b-932ea1b51eb5",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 10,
+        "x": 10,
+        "w": 16,
+        "h": 10
+      },
+      "config": {
+        "title": "q5. Card-present vs card-not-present",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-transactions-*\n| EVAL card_type = CASE(\n    card_present == true, \"Card-present\",\n    \"Card-not-present\"\n)\n| STATS\n    transaction_count = COUNT(*)\n  BY country, card_type\n| SORT country ASC, transaction_count DESC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "country"
+            },
+            "y": [
+              {
+                "column": "transaction_count"
+              }
+            ],
+            "breakdown_by": {
+              "column": "card_type",
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": [
+                  {
+                    "values": [
+                      "Card-present"
+                    ],
+                    "color": {
+                      "type": "from_palette",
+                      "palette": "default",
+                      "index": 0
+                    }
+                  },
+                  {
+                    "values": [
+                      "Card-not-present"
+                    ],
+                    "color": {
+                      "type": "from_palette",
+                      "palette": "default",
+                      "index": 9
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "text": "By Country",
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y": {
+            "title": {
+              "text": "Number of transaction",
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": true
+            }
+          }
+        },
+        "legend": {
+          "position": "bottom",
+          "placement": "outside",
+          "layout": {
+            "type": "list"
+          },
+          "visibility": "auto"
+        }
+      },
+      "id": "edf1798c-0fde-445f-8773-8c2210b81091",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 10,
+        "x": 26,
+        "w": 12,
+        "h": 10
+      },
+      "config": {
+        "title": "q6. Cities' ATMs dispense the most cash",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-atm-*\n| WHERE op == \"withdrawal\" AND result == \"ok\"\n| STATS cash_dispensed = SUM(amount) BY city\n| SORT cash_dispensed DESC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "city"
+            },
+            "y": [
+              {
+                "column": "cash_dispensed",
+                "color": {
+                  "type": "auto"
+                }
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "text": "City",
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y": {
+            "title": {
+              "text": "Cash Dispensed (in €)",
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": true
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "3ea13d48-ac74-4565-8575-90768f7c0e45",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 20,
+        "x": 0,
+        "w": 14,
+        "h": 10
+      },
+      "config": {
+        "title": "q7.1. When it happens ?",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "line",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-transactions-*\n| STATS transaction_count = COUNT(*) BY minute = BUCKET(@timestamp, 5 minutes)\n| SORT minute ASC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "minute"
+            },
+            "y": [
+              {
+                "column": "transaction_count",
+                "color": {
+                  "type": "auto"
+                }
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "temporal"
+          },
+          "y": {
+            "title": {
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "fitting": {
+            "type": "linear"
+          },
+          "interpolation": "linear",
+          "points": {
+            "visibility": "auto"
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "0f5f1387-225a-4a1c-8c1d-4c8223e41219",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 20,
+        "x": 14,
+        "w": 12,
+        "h": 10
+      },
+      "config": {
+        "title": "q7.2 - Involved countries in the suspected fraud",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-transactions-*\n| WHERE status == \"declined\"\n  AND reason == \"suspected_fraud\"\n| STATS suspected_fraud_transactions = COUNT(*) BY country\n| SORT suspected_fraud_transactions DESC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "country"
+            },
+            "y": [
+              {
+                "column": "suspected_fraud_transactions",
+                "color": {
+                  "type": "auto"
+                }
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y": {
+            "title": {
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "88cccb79-0e60-4c68-9af0-32e220654c47",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 30,
+        "x": 0,
+        "w": 22,
+        "h": 18
+      },
+      "config": {
+        "description": "This graphique helps to frame the case.\nBy observing the result, we will focus on the US & card non present or we can say it link with online payment",
+        "title": "q7.3 - Most fraud count by merchant, involved country & Card present (or not)",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-transactions-*\n| WHERE amount > 1160\n  AND status == \"declined\"\n  AND reason == \"suspected_fraud\"\n| STATS fraud_count = COUNT(*)\n  BY merchant, country, card_present\n  | SORT fraud_count DESC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "merchant"
+            },
+            "y": [
+              {
+                "column": "fraud_count"
+              }
+            ],
+            "breakdown_by": {
+              "column": "country",
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y": {
+            "title": {
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "76839d0f-9e4c-4575-80b4-7219846b2850",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 30,
+        "x": 22,
+        "w": 17,
+        "h": 18
+      },
+      "config": {
+        "title": "q7.3 - Time window",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "line",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-transactions-*\n| WHERE amount > 1160\n  AND status == \"declined\"\n  AND reason == \"suspected_fraud\"\n  AND country == \"US\"\n| STATS fraud_count = COUNT(*)\n  BY time = BUCKET(@timestamp, 1  s )\n| SORT time ASC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "time"
+            },
+            "y": [
+              {
+                "column": "fraud_count",
+                "color": {
+                  "type": "auto"
+                }
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "temporal"
+          },
+          "y": {
+            "title": {
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "fitting": {
+            "type": "linear"
+          },
+          "interpolation": "linear",
+          "points": {
+            "visibility": "auto"
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "4a336a59-9008-4b6b-91ec-71e5dc5ee457",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 30,
+        "x": 39,
+        "w": 9,
+        "h": 11
+      },
+      "config": {
+        "title": "q7.3 - Authentification by country on this time window",
+        "type": "pie",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "column": "auth_count"
+          }
+        ],
+        "group_by": [
+          {
+            "column": "geoip.country_name",
+            "color": {
+              "mode": "categorical",
+              "palette": "default",
+              "mapping": []
+            }
+          }
+        ],
+        "data_source": {
+          "type": "esql",
+          "query": "FROM bank-auth-*\n| WHERE @timestamp >= TO_DATETIME(\"2026-07-26T00:00:00Z\")\n  AND @timestamp < TO_DATETIME(\"2026-07-26T03:00:00Z\")\n| STATS auth_count = COUNT(*) BY `geoip.country_name`\n| SORT auth_count DESC"
+        },
+        "legend": {
+          "visibility": "auto",
+          "nested": false
+        },
+        "styling": {
+          "labels": {
+            "visible": true,
+            "position": "outside"
+          },
+          "values": {
+            "visible": true,
+            "mode": "percentage"
+          }
+        }
+      },
+      "id": "b8f84660-cbc4-4b78-b33c-b17ee63c76be",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 41,
+        "x": 39,
+        "w": 9,
+        "h": 7
+      },
+      "config": {
+        "title": "q8. Unparseable ratio",
+        "data_source": {
+          "type": "esql",
+          "query": "FROM bank-* METADATA _index\n| WHERE @timestamp >= TO_DATETIME(\"2026-07-25T00:00:00+02:00\")\n  AND @timestamp < TO_DATETIME(\"2026-08-04T00:00:00+02:00\")\n| EVAL is_deadletter = CASE(\n    _index LIKE \"bank-deadletter-*\",\n    1,\n    0\n  )\n| STATS\n    total_lines = COUNT(*),\n    deadletter_lines = SUM(is_deadletter)\n| EVAL unparseable_share_pct =\n    ROUND(deadletter_lines * 1.00000/ total_lines, 6)"
+        },
+        "type": "metric",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "type": "primary",
+            "column": "unparseable_share_pct",
+            "format": {
+              "type": "custom",
+              "pattern": "0,0.[000]%"
+            },
+            "color": {
+              "type": "auto"
+            }
+          },
+          {
+            "type": "secondary",
+            "column": "deadletter_lines",
+            "compare": {
+              "to": "baseline",
+              "baseline": 0,
+              "palette": "compare_to",
+              "icon": true,
+              "value": true
+            },
+            "color": {
+              "type": "none"
+            }
+          }
+        ],
+        "breakdown_by": {
+          "column": "deadletter_lines",
+          "columns": 3
+        },
+        "styling": {
+          "primary": {
+            "position": "top",
+            "labels": {
+              "alignment": "left"
+            },
+            "value": {
+              "sizing": "fill",
+              "alignment": "left"
+            }
+          },
+          "secondary": {
+            "label": {
+              "visible": true,
+              "placement": "after"
+            },
+            "value": {
+              "alignment": "right"
+            }
+          }
+        }
+      },
+      "id": "e03b42db-5b0a-456f-861f-1b04a6076c85",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 10,
+        "x": 38,
+        "w": 10,
+        "h": 10
+      },
+      "config": {
+        "title": "q6. ATM error rate",
+        "type": "data_table",
+        "data_source": {
+          "type": "esql",
+          "query": "FROM bank-atm-*\n| WHERE op == \"withdrawal\"\n| EVAL is_error = CASE(result != \"ok\", 1, 0)\n| STATS\n    total_withdrawals = COUNT(*),\n    withdrawal_errors = SUM(is_error)\n  BY city\n| EVAL atm_error_rate = ROUND(\n    withdrawal_errors * 100.0 / total_withdrawals,\n    2\n  )\n| KEEP city, total_withdrawals, withdrawal_errors, atm_error_rate\n| SORT atm_error_rate DESC"
+        },
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "column": "total_withdrawals",
+            "label": "Total withdrawals",
+            "alignment": "center"
+          },
+          {
+            "column": "withdrawal_errors",
+            "label": "Withdrawal errors",
+            "alignment": "center"
+          },
+          {
+            "column": "atm_error_rate",
+            "label": "ATM error rate (%)",
+            "alignment": "center"
+          }
+        ],
+        "rows": [
+          {
+            "column": "city"
+          }
+        ],
+        "styling": {
+          "row_numbers": {
+            "visible": true
+          }
+        }
+      },
+      "id": "50f7d1cc-de84-4d2a-b099-9ffb2fdbf161",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 20,
+        "x": 26,
+        "w": 14,
+        "h": 10
+      },
+      "config": {
+        "title": "q7.3 - Percentile analysis (payment succesfull not meaning no fraud)",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM bank-transactions-*\n| EVAL category =\n    CASE(\n        status == \"approved\", \"approved\",\n        status == \"declined\" AND reason == \"suspected_fraud\", \"suspected_fraud\",\n        \"other\"\n    )\n| WHERE category != \"other\"\n| STATS\n    p50 = PERCENTILE(amount, 50),\n    p90 = PERCENTILE(amount, 90),\n    p95 = PERCENTILE(amount, 95),\n    p99 = PERCENTILE(amount, 99),\n    max_amount = MAX(amount)\n  BY category\n"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "category"
+            },
+            "y": [
+              {
+                "column": "p50",
+                "color": {
+                  "type": "auto"
+                }
+              },
+              {
+                "column": "p90",
+                "color": {
+                  "type": "auto"
+                }
+              },
+              {
+                "column": "p95",
+                "color": {
+                  "type": "auto"
+                }
+              },
+              {
+                "column": "p99",
+                "color": {
+                  "type": "auto"
+                }
+              },
+              {
+                "column": "max_amount",
+                "color": {
+                  "type": "auto"
+                }
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": true
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y": {
+            "title": {
+              "visible": true
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "visible"
+        }
+      },
+      "id": "2bb50f51-40a0-4197-ac2a-18f9ab6423e6",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "y": 20,
+        "x": 40,
+        "w": 8,
+        "h": 10
+      },
+      "config": {
+        "title": "q7.3 - Card presnet vs Card not present in this time window",
+        "type": "pie",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "column": "fraud_count"
+          }
+        ],
+        "group_by": [
+          {
+            "column": "payment_type",
+            "color": {
+              "mode": "categorical",
+              "palette": "elastic_line_optimized",
+              "mapping": []
+            }
+          }
+        ],
+        "data_source": {
+          "type": "esql",
+          "query": "FROM bank-transactions-*\n| WHERE amount > 1160\n  AND status == \"declined\"\n  AND reason == \"suspected_fraud\"\n  AND country == \"US\"\n| EVAL payment_type = CASE(\n    card_present == true, \"Card Present\",\n    \"Card Not Present\"\n  )\n| STATS fraud_count = COUNT(*) BY payment_type\n| SORT fraud_count DESC"
+        },
+        "legend": {
+          "visibility": "auto",
+          "nested": false
+        },
+        "styling": {
+          "labels": {
+            "visible": true,
+            "position": "outside"
+          },
+          "values": {
+            "visible": true,
+            "mode": "percentage"
+          }
+        }
+      },
+      "id": "d574e750-2110-4a07-8d41-ba09242e079f",
+      "type": "vis"
+    }
+  ],
+  "pinned_panels": []
+}

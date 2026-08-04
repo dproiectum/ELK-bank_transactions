@@ -1,11 +1,13 @@
 
 # Note :
 
-    I set the time periode from **25/07/2026 to 31/07/2027**
+    For most cases, I set the time periode from **25/07/2026 to 31/07/2027**
 
 # 1. Transaction volume (count) and value (sum) over time, by currency 
 
-Transactions count over time, by currency
+## 1.1 Transactions count over time, by currency
+
+ES|QL
 
 ```
 FROM bank-*
@@ -15,9 +17,11 @@ FROM bank-*
   BY date = BUCKET(@timestamp, 1h), currency
 | SORT date ASC, currency ASC
 ```
+<img src="screenshots/q1. Transactions count over time, by currency.png" alt="Transactions count over time, by currency" width="800">
 
+## 1.2 Transactions value over time, by currency
 
-Transactions value over time, by currency
+ES|QL
 
 ```
 FROM bank-*
@@ -27,6 +31,8 @@ FROM bank-*
   BY date = BUCKET(@timestamp, 1h), currency
 | SORT date ASC, currency ASC
 ```
+
+<img src="screenshots/q1. Transactions value over time, by currency.png" alt="Transactions value over time, by currency" width="800">
 
 # 2. What is the approval rate (approved vs declined) over time?
 
@@ -39,6 +45,7 @@ FROM bank-transactions-*
 | SORT transaction_count DESC
 ```
 
+<img src="screenshots/q2. Approved vs Declined rate over time.png" alt="Transactions value over time, by currency" width="300">
 
 
 # 3. Top 10 merchants by transaction value?
@@ -55,6 +62,8 @@ FROM bank-transactions-*
 ```
 
 
+<img src="screenshots/q3. Top 10 merchants by transaction value.png" alt="Transactions value over time, by currency" width="800">
+
 
 # 4. What are the top decline reasons?
 
@@ -67,6 +76,8 @@ FROM bank-transactions-*
 | STATS declined_count = COUNT(*) BY reason
 | SORT declined_count DESC
 ```
+
+<img src="screenshots/q4. Declined reason.png" alt="Transactions value over time, by currency" width="300">
 
 
 
@@ -84,6 +95,8 @@ FROM bank-transactions-*
   BY country, card_type
 | SORT country ASC, transaction_count DESC
 ```
+
+<img src="screenshots/q5. Card-present vs card-not-present.png" alt="Transactions value over time, by currency" width="800">
 
 
 
@@ -129,7 +142,7 @@ Result
 | **6** | Bordeaux | 102,000 |
 
 
-
+<img src="screenshots/q6. Cities' ATMs dispense the most cash.png" alt="Transactions value over time, by currency" width="800">
 
 
 ## ATM error rate
@@ -150,6 +163,9 @@ FROM bank-atm-*
 | SORT atm_error_rate DESC
 ```
 
+<img src="screenshots/q6. ATM error rate.png" alt="Transactions value over time, by currency" width="800">
+
+
 
 # 7. Fraud attack investigation
 
@@ -160,6 +176,9 @@ FROM bank-transactions-*
 | STATS transaction_count = COUNT(*) BY minute = BUCKET(@timestamp, 5 minutes)
 | SORT minute ASC
 ```
+
+<img src="screenshots/q7.1. When it happens.png"  width="800">
+
 
 ## 7.2. Involved countries in the detected suspected fraud
 
@@ -176,9 +195,11 @@ FROM bank-transactions-*
 | SORT suspected_fraud_transactions DESC
 ```
 
+<img src="screenshots/q7.2 - Involved countries in the suspected fraud.png"  width="800">
+
 <br>
 
-But it may have some potential succesful fraud
+But it may have some potential succesful fraud, that why we need to know the **high amount** to focus
 
 
 
@@ -204,6 +225,9 @@ FROM bank-transactions-*
     max_amount = MAX(amount)
   BY category
 ```
+
+<img src="screenshots/q7.3 - Percentile analysis (payment succesfull not meaning no fraud).png"  width="800">
+
 
 | Metric | Approved Transactions | Suspected Fraud Transactions | Interpretation |
 |--------|----------------------:|-----------------------------:|----------------|
@@ -231,6 +255,9 @@ FROM bank-transactions-*
 
 ```
 
+<img src="screenshots/q7.3 - Most fraud count by merchant, involved country & Card present (or not).png"  width="800">
+
+
 
 This graphique helps to frame the case.
 By observing the result, we will focus on the US & card non present
@@ -253,6 +280,10 @@ Zoom in :
 - end : Jul 26, 2026 @ 02:02:55.000
 
 
+<img src="screenshots/q7.3. Time Window.png"  width="800">
+
+
+
 ### Card present vs Card not presnet
 
 ```
@@ -269,6 +300,10 @@ FROM bank-transactions-*
 | SORT fraud_count DESC
 ```
 
+<img src="screenshots/q7.3 - Card present vs Card not present in this time window.png"  width="300">
+
+
+
 ### Authentification by country on this time window
 
 ```
@@ -278,6 +313,9 @@ FROM bank-auth-*
 | STATS auth_count = COUNT(*) BY `geoip.country_name`
 | SORT auth_count DESC
 ```
+
+<img src="screenshots/q7.3 - Authentification by country on this time window.png"  width="400">
+
 
 ## Fraud Investigation Conclusion
 
@@ -300,7 +338,7 @@ The combination of **high-value transactions**, **U.S. origin**, **Card Not Pres
 
 ```
 FROM bank-* METADATA _index
-| WHERE @timestamp >= TO_DATETIME("2026-08-03T00:00:00+02:00")
+| WHERE @timestamp >= TO_DATETIME("2026-07-25T00:00:00+02:00")
   AND @timestamp < TO_DATETIME("2026-08-04T00:00:00+02:00")
 | EVAL is_deadletter = CASE(
     _index LIKE "bank-deadletter-*",
@@ -309,16 +347,17 @@ FROM bank-* METADATA _index
   )
 | STATS
     total_lines = COUNT(*),
-    deadletter_lines = SUM(is_deadletter)BY 
+    deadletter_lines = SUM(is_deadletter)
 | EVAL unparseable_share_pct =
     ROUND(deadletter_lines * 1.00000/ total_lines, 6)
 ```
 
+<img src="screenshots/q8. Unparseable ratio.png" alt="Transactions value over time, by currency" width="300">
 
 
 ### Dead-letter Rate
 
-On 3 August 2026, approximately **18.55k out of 1.00 million ingested lines** were unparseable and redirected to the dead-letter index. This represents an unparseable share of approximately **1.85%**.
+From 25 July util 4 August 2026, approximately **20 730 out of more 1 million ingested lines** were unparseable and redirected to the dead-letter index. This represents an unparseable share of approximately **0,885%**. This ratio changes over time.
 
 
 
